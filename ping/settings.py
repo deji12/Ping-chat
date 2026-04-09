@@ -79,9 +79,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ping.wsgi.application'
 ASGI_APPLICATION = "ping.asgi.application"
 
-CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
-}
+DEPLOYED_ON = config('DEPLOYED_ON')
+
+if DEPLOYED_ON == 'local':
+    CHANNEL_LAYERS = {
+        "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [(config('REDIS_HOST'), config('REDIS_PORT'))],
+            },
+        },
+    }
 
 
 # Database
