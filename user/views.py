@@ -66,7 +66,7 @@ def login_user(request):
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			login(request, user)
-			return redirect(reverse('profile', kwargs={'username': user.username}))
+			return redirect(request.GET.get('next') or reverse('chat'))
 		
 		messages.error(request, 'Invalid username or password provided')
 		return redirect('login_user')
