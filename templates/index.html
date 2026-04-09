@@ -1,124 +1,179 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}ping – Real‑time chat, simplified{% endblock %}
+{% block title %}ping – real‑time chat, simplified{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section position-relative overflow-hidden">
-    <div class="container py-5">
-        <div class="row align-items-center min-vh-75">
-            <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
-                <h1 class="display-3 fw-bold mb-4">
+<section class="hero-section py-5">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="overline-label">Real‑time chat</div>
+                <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -0.02em;">
                     Chat that <span class="gradient-text">feels like home</span>
                 </h1>
                 <p class="lead text-secondary mb-4">
-                    ping is a modern, real‑time messaging platform where conversations flow naturally. 
-                    Connect with friends, share images, and never miss a beat – all in a beautiful, 
-                    privacy‑focused space.
+                    ping is a modern, real‑time messaging platform. Connect with friends, share images, and never miss a beat – all in a beautifully simple space.
                 </p>
                 <div class="d-flex flex-wrap gap-3">
-                    <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm hover-lift">
+                    <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
                         <i class="bi bi-person-plus me-2"></i>Get started – it's free
                     </a>
-                    <a href="#features" class="btn btn-outline-custom btn-lg rounded-pill px-5 py-3 hover-lift">
+                    <a href="#features" class="btn btn-outline-custom btn-lg rounded-pill px-5 py-3">
                         <i class="bi bi-arrow-down me-2"></i>Explore features
                     </a>
                 </div>
-                <div class="mt-4 d-flex align-items-center gap-3 text-muted small">
-                    <span><i class="bi bi-shield-check me-1"></i> No spam</span>
-                    <span><i class="bi bi-lock-fill me-1"></i> Encrypted</span>
-                    <span><i class="bi bi-github me-1"></i> Open source</span>
+                <div class="mt-4 d-flex gap-3 small text-muted">
+                    <span><i class="bi bi-shield-check"></i> No spam</span>
+                    <span><i class="bi bi-lock"></i> Encrypted</span>
+                    <span><i class="bi bi-github"></i> Open source</span>
                 </div>
             </div>
-            <div class="col-lg-6 text-center" data-aos="fade-left">
-                <div class="hero-icon-wrapper d-inline-block position-relative">
-                    <div class="hero-icon-glow"></div>
-                    <div class="hero-icon-bg bg-primary bg-opacity-10 rounded-4 p-5 position-relative">
-                        <i class="bi bi-chat-dots-fill display-1 text-primary" style="color: #667eea;"></i>
-                        <div class="floating-icon top-0 start-100 translate-middle">
-                            <i class="bi bi-chat-heart-fill fs-2" style="color: #764ba2;"></i>
+            <div class="col-lg-6 text-center">
+                <!-- Chat mockup (real UI) -->
+                <div class="chat-mockup mx-auto">
+                    <div class="chat-mockup-header">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="fw-medium" style="font-size: 12px;">JD</span>
                         </div>
-                        <div class="floating-icon bottom-0 start-0 translate-middle">
-                            <i class="bi bi-chat-quote-fill fs-3" style="color: #667eea;"></i>
-                        </div>
-                        <div class="floating-icon top-50 start-0 translate-middle-y">
-                            <i class="bi bi-chat-fill fs-4" style="color: #a78bfa;"></i>
+                        <div>
+                            <div class="fw-medium">Jane Doe</div>
+                            <div class="small text-muted"><span class="online-dot"></span> Active now</div>
                         </div>
                     </div>
-                    <p class="mt-4 text-muted small">Real‑time conversations, beautifully simple</p>
+                    <div class="chat-mockup-messages">
+                        <div class="message-bubble received">
+                            <div class="bubble received">Hey! Are you free to chat?</div>
+                        </div>
+                        <div class="message-bubble sent" style="background: none;">
+                            <div class="bubble sent">Absolutely! What's up?</div>
+                        </div>
+                        <div class="message-bubble received">
+                            <div class="bubble received">Check out this new feature – image previews</div>
+                        </div>
+                        <div class="typing-indicator">
+                            <span></span><span></span><span></span>
+                            <span class="ms-2 small text-muted">Typing...</span>
+                        </div>
+                    </div>
+                    <div class="input-mock">
+                        <input type="text" placeholder="Type a message..." value="Looks great!">
+                        <button><i class="bi bi-send"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Wave separator -->
-    <div class="wave-separator">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path fill="#ffffff" fill-opacity="1" d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
-        </svg>
     </div>
 </section>
 
-<!-- Feature Highlights -->
-<section id="features" class="py-5 bg-white">
+<!-- Features Section -->
+<section id="features" class="py-5 bg-white border-top border-bottom">
     <div class="container py-4">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="fw-bold mb-3">Everything you need for <span class="gradient-text">real connection</span></h2>
-            <p class="text-secondary col-lg-7 mx-auto">Designed to be fast, intuitive, and a joy to use – whether you're catching up with friends or collaborating.</p>
+        <div class="text-center mb-5">
+            <div class="overline-label">Why ping</div>
+            <h2 class="section-title fw-bold">Everything you need for <span class="gradient-text">real connection</span></h2>
+            <p class="section-subtitle text-secondary mx-auto" style="max-width: 600px;">
+                Designed to be fast, intuitive, and a joy to use – whether you're catching up with friends or collaborating.
+            </p>
         </div>
         <div class="row g-4">
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-chat-dots-fill fs-1" style="color: #667eea;"></i>
+                        <i class="bi bi-chat-dots-fill fs-2" style="color: #667eea;"></i>
                     </div>
-                    <h5 class="fw-bold">Real‑time messaging</h5>
-                    <p class="text-secondary">WebSocket‑powered instant delivery with typing indicators and read receipts.</p>
+                    <h5 class="fw-semibold">Real‑time messaging</h5>
+                    <p class="text-secondary small">WebSocket‑powered instant delivery with typing indicators and read receipts.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-image-fill fs-1" style="color: #667eea;"></i>
+                        <i class="bi bi-image-fill fs-2" style="color: #667eea;"></i>
                     </div>
-                    <h5 class="fw-bold">Rich media sharing</h5>
-                    <p class="text-secondary">Send images with captions – preview before sending, just like WhatsApp.</p>
+                    <h5 class="fw-semibold">Rich media sharing</h5>
+                    <p class="text-secondary small">Send images with captions – preview before sending, just like WhatsApp.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-people-fill fs-1" style="color: #667eea;"></i>
+                        <i class="bi bi-people-fill fs-2" style="color: #667eea;"></i>
                     </div>
-                    <h5 class="fw-bold">Friend network</h5>
-                    <p class="text-secondary">Add friends, accept requests, and see mutual connections – grow your circle.</p>
+                    <h5 class="fw-semibold">Friend network</h5>
+                    <p class="text-secondary small">Add friends, accept requests, and see mutual connections – grow your circle.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-bell-fill fs-1" style="color: #667eea;"></i>
+                        <i class="bi bi-bell-fill fs-2" style="color: #667eea;"></i>
                     </div>
-                    <h5 class="fw-bold">Smart notifications</h5>
-                    <p class="text-secondary">Unread badges keep you in the loop – never miss an important message.</p>
+                    <h5 class="fw-semibold">Smart notifications</h5>
+                    <p class="text-secondary small">Unread badges keep you in the loop – never miss an important message.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-person-circle fs-1" style="color: #667eea;"></i>
+                        <i class="bi bi-person-circle fs-2" style="color: #667eea;"></i>
                     </div>
-                    <h5 class="fw-bold">Custom profile</h5>
-                    <p class="text-secondary">Upload a profile picture, write a bio, and make your presence unique.</p>
+                    <h5 class="fw-semibold">Custom profile</h5>
+                    <p class="text-secondary small">Upload a profile picture, write a bio, and make your presence unique.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-shield-lock-fill fs-1" style="color: #667eea;"></i>
+                        <i class="bi bi-shield-lock-fill fs-2" style="color: #667eea;"></i>
                     </div>
-                    <h5 class="fw-bold">Privacy first</h5>
-                    <p class="text-secondary">Your data stays yours. Secure authentication and optional message encryption.</p>
+                    <h5 class="fw-semibold">Privacy first</h5>
+                    <p class="text-secondary small">Your data stays yours. Secure authentication and optional message encryption.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Chat Demo Section (second mockup) -->
+<section id="chat" class="py-5">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <div class="overline-label">Experience it live</div>
+            <h2 class="section-title fw-bold">Real conversations, <span class="gradient-text">zero clutter</span></h2>
+            <p class="section-subtitle text-secondary mx-auto">No fake screenshots – this is exactly how ping works.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="chat-mockup mx-auto">
+                    <div class="chat-mockup-header">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="fw-medium" style="font-size: 12px;">MK</span>
+                        </div>
+                        <div>
+                            <div class="fw-medium">Marcus Lee</div>
+                            <div class="small text-muted"><span class="online-dot"></span> Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-mockup-messages">
+                        <div class="message-bubble received">
+                            <div class="bubble received">Hey, have you seen the new design?</div>
+                        </div>
+                        <div class="message-bubble sent" style="background: none;">
+                            <div class="bubble sent">Yes! It's so clean – no gradients, just pure content.</div>
+                        </div>
+                        <div class="message-bubble received">
+                            <div class="bubble received">Love the flat style. Feels modern.</div>
+                        </div>
+                        <div class="message-bubble sent" style="background: none;">
+                            <div class="bubble sent">Exactly. Let's share this with the team.</div>
+                        </div>
+                    </div>
+                    <div class="input-mock">
+                        <input type="text" placeholder="Type a message...">
+                        <button><i class="bi bi-send"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,65 +181,51 @@
 </section>
 
 <!-- Call to Action -->
-<section class="cta-section py-5 position-relative overflow-hidden">
-    <div class="container py-4 text-center position-relative z-1">
+<section class="py-5 bg-light border-top">
+    <div class="container py-4 text-center">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <h2 class="fw-bold mb-3">Ready to start chatting?</h2>
-                <p class="text-secondary mb-4">Join hundreds of users who already love ping – sign up in seconds.</p>
-                <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm hover-lift">
+                <div class="overline-label">Join the community</div>
+                <h2 class="section-title fw-bold">Ready to start chatting?</h2>
+                <p class="section-subtitle text-secondary mb-4">Sign up in seconds – no credit card required.</p>
+                <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
                     <i class="bi bi-person-plus me-2"></i>Create your free account
                 </a>
-                <p class="mt-4 text-muted small">Already have an account? <a href="{% url 'login_user' %}" class="fw-semibold text-decoration-none">Sign in →</a></p>
+                <p class="mt-3 small text-muted">Already have an account? <a href="{% url 'login_user' %}" class="fw-semibold text-decoration-none">Sign in →</a></p>
             </div>
         </div>
     </div>
-    <!-- Subtle background pattern -->
-    <div class="cta-bg"></div>
 </section>
 
-<!-- Footer -->
-<footer class="py-4 border-top bg-white">
-    <div class="container text-center text-muted small">
-        <p class="mb-0">© {% now "Y" %} ping – real‑time chat. Built with <i class="bi bi-heart-fill text-danger"></i> using Django & Bootstrap.</p>
-    </div>
-</footer>
-{% endblock %}
-
-{% block extra_css %}
 <style>
-    /* Animations & polish */
-    .hero-section {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        position: relative;
+    /* Additional overrides for the flat/minimal style while keeping the original design system */
+    .overline-label {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #667eea;
+        margin-bottom: 0.5rem;
     }
-    .min-vh-75 {
-        min-height: 75vh;
+    .section-title {
+        font-size: 28px;
+        letter-spacing: -0.01em;
     }
-    .hover-lift {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .hover-lift:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2) !important;
+    .section-subtitle {
+        font-size: 16px;
+        color: #64748b;
     }
     .feature-card {
+        transition: all 0.2s ease;
         background: white;
-        transition: all 0.3s ease;
-        border: 1px solid #f0f2f5;
     }
     .feature-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.05) !important;
-        border-color: rgba(102, 126, 234, 0.2);
+        transform: translateY(-4px);
+        border-color: #c7d2fe;
+        background: #fafafe;
     }
     .feature-icon {
-        width: 70px;
-        height: 70px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
+        transition: all 0.2s;
     }
     .feature-card:hover .feature-icon {
         background: linear-gradient(135deg, #667eea, #764ba2) !important;
@@ -196,6 +237,7 @@
         border: 2px solid #667eea;
         color: #667eea;
         background: transparent;
+        border-radius: 50px;
         transition: all 0.2s;
     }
     .btn-outline-custom:hover {
@@ -204,87 +246,115 @@
         color: white;
         transform: translateY(-2px);
     }
-    /* Hero icon enhancements */
-    .hero-icon-bg {
-        backdrop-filter: blur(4px);
-        transition: transform 0.3s ease;
+    /* Chat mockup styles (match the minimal UI) */
+    .chat-mockup {
+        background: white;
+        border: 1px solid #eef2ff;
+        border-radius: 20px;
+        overflow: hidden;
+        max-width: 480px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     }
-    .hero-icon-bg:hover {
-        transform: scale(1.02);
+    .chat-mockup-header {
+        padding: 12px 16px;
+        border-bottom: 1px solid #eef2ff;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .floating-icon {
-        position: absolute;
-        animation: float 3s ease-in-out infinite;
+    .chat-mockup-messages {
+        padding: 16px;
+        min-height: 280px;
+        background: #fefefe;
     }
-    .floating-icon:nth-child(2) { animation-delay: 0.5s; }
-    .floating-icon:nth-child(3) { animation-delay: 1s; }
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-8px); }
-        100% { transform: translateY(0px); }
+    .message-bubble {
+        max-width: 80%;
+        margin-bottom: 12px;
+        display: flex;
+        flex-direction: column;
     }
-    .wave-separator {
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        width: 100%;
-        line-height: 0;
+    .message-bubble.sent {
+        align-items: flex-end;
     }
-    .cta-section {
-        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+    .bubble {
+        padding: 8px 12px;
+        border-radius: 18px;
+        font-size: 14px;
+        line-height: 1.4;
     }
-    .cta-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.03) 0%, transparent 50%);
-        pointer-events: none;
+    .bubble.sent {
+        background: #667eea;
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+    .bubble.received {
+        background: #f1f5f9;
+        color: #1e293b;
+        border-bottom-left-radius: 4px;
+    }
+    .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 8px 12px;
+        background: #f1f5f9;
+        border-radius: 18px;
+        width: fit-content;
+    }
+    .typing-indicator span {
+        width: 6px;
+        height: 6px;
+        background: #94a3b8;
+        border-radius: 50%;
+        animation: blink 1.4s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink {
+        0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+        30% { opacity: 1; transform: translateY(-2px); }
+    }
+    .online-dot {
+        width: 8px;
+        height: 8px;
+        background: #22c55e;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 4px;
+    }
+    .input-mock {
+        border-top: 1px solid #eef2ff;
+        padding: 12px 16px;
+        display: flex;
+        gap: 8px;
+    }
+    .input-mock input {
+        flex: 1;
+        border: 1px solid #eef2ff;
+        border-radius: 24px;
+        padding: 8px 14px;
+        font-size: 14px;
+        background: white;
+        outline: none;
+    }
+    .input-mock button {
+        background: #eef2ff;
+        border: none;
+        border-radius: 24px;
+        padding: 8px 16px;
+        font-size: 14px;
+        color: #667eea;
+        transition: background 0.2s;
+    }
+    .input-mock button:hover {
+        background: #e2e8f0;
     }
     @media (max-width: 768px) {
-        .hero-section .display-3 {
-            font-size: 2.5rem;
+        .hero-section .display-4 {
+            font-size: 2.2rem;
         }
-        .min-vh-75 {
-            min-height: auto;
-            padding: 3rem 0;
+        .section-title {
+            font-size: 24px;
         }
-        .wave-separator {
-            display: none;
-        }
-    }
-    /* Smooth scroll */
-    html {
-        scroll-behavior: smooth;
-    }
-    /* AOS animations (optional, you can include AOS library or just rely on CSS) */
-    [data-aos] {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.6s ease;
-    }
-    [data-aos].aos-animate {
-        opacity: 1;
-        transform: translateY(0);
     }
 </style>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Simple AOS-like trigger (no external library)
-    document.addEventListener('DOMContentLoaded', function() {
-        const elements = document.querySelectorAll('[data-aos]');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('aos-animate');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        elements.forEach(el => observer.observe(el));
-    });
-</script>
 {% endblock %}
