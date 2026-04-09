@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ping – Real‑time chat, simplified{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                <h1 class="display-3 fw-bold mb-4">
+                    Chat that <span class="gradient-text">feels like home</span>
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    ping is a modern, real‑time messaging platform where conversations flow naturally. 
+                    Connect with friends, share images, and never miss a beat – all in a beautiful, 
+                    privacy‑focused space.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm hover-lift">
+                        <i class="bi bi-person-plus me-2"></i>Get started – it's free
+                    </a>
+                    <a href="#features" class="btn btn-outline-custom btn-lg rounded-pill px-5 py-3 hover-lift">
+                        <i class="bi bi-arrow-down me-2"></i>Explore features
+                    </a>
+                </div>
+                <div class="mt-4 d-flex align-items-center gap-3 text-muted small">
+                    <span><i class="bi bi-shield-check me-1"></i> No spam</span>
+                    <span><i class="bi bi-lock-fill me-1"></i> Encrypted</span>
+                    <span><i class="bi bi-github me-1"></i> Open source</span>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center" data-aos="fade-left">
+                <div class="hero-icon-wrapper d-inline-block position-relative">
+                    <div class="hero-icon-glow"></div>
+                    <div class="hero-icon-bg bg-primary bg-opacity-10 rounded-4 p-5 position-relative">
+                        <i class="bi bi-chat-dots-fill display-1 text-primary" style="color: #667eea;"></i>
+                        <div class="floating-icon top-0 start-100 translate-middle">
+                            <i class="bi bi-chat-heart-fill fs-2" style="color: #764ba2;"></i>
+                        </div>
+                        <div class="floating-icon bottom-0 start-0 translate-middle">
+                            <i class="bi bi-chat-quote-fill fs-3" style="color: #667eea;"></i>
+                        </div>
+                        <div class="floating-icon top-50 start-0 translate-middle-y">
+                            <i class="bi bi-chat-fill fs-4" style="color: #a78bfa;"></i>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-muted small">Real‑time conversations, beautifully simple</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Wave separator -->
+    <div class="wave-separator">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path fill="#ffffff" fill-opacity="1" d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Feature Highlights -->
+<section id="features" class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold mb-3">Everything you need for <span class="gradient-text">real connection</span></h2>
+            <p class="text-secondary col-lg-7 mx-auto">Designed to be fast, intuitive, and a joy to use – whether you're catching up with friends or collaborating.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-chat-dots-fill fs-1" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Real‑time messaging</h5>
+                    <p class="text-secondary">WebSocket‑powered instant delivery with typing indicators and read receipts.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-image-fill fs-1" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Rich media sharing</h5>
+                    <p class="text-secondary">Send images with captions – preview before sending, just like WhatsApp.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-people-fill fs-1" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Friend network</h5>
+                    <p class="text-secondary">Add friends, accept requests, and see mutual connections – grow your circle.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-bell-fill fs-1" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Smart notifications</h5>
+                    <p class="text-secondary">Unread badges keep you in the loop – never miss an important message.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-person-circle fs-1" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Custom profile</h5>
+                    <p class="text-secondary">Upload a profile picture, write a bio, and make your presence unique.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border-0">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
+                        <i class="bi bi-shield-lock-fill fs-1" style="color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Privacy first</h5>
+                    <p class="text-secondary">Your data stays yours. Secure authentication and optional message encryption.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5 position-relative overflow-hidden">
+    <div class="container py-4 text-center position-relative z-1">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-3">Ready to start chatting?</h2>
+                <p class="text-secondary mb-4">Join hundreds of users who already love ping – sign up in seconds.</p>
+                <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm hover-lift">
+                    <i class="bi bi-person-plus me-2"></i>Create your free account
+                </a>
+                <p class="mt-4 text-muted small">Already have an account? <a href="{% url 'login_user' %}" class="fw-semibold text-decoration-none">Sign in →</a></p>
+            </div>
+        </div>
+    </div>
+    <!-- Subtle background pattern -->
+    <div class="cta-bg"></div>
+</section>
+
+<!-- Footer -->
+<footer class="py-4 border-top bg-white">
+    <div class="container text-center text-muted small">
+        <p class="mb-0">© {% now "Y" %} ping – real‑time chat. Built with <i class="bi bi-heart-fill text-danger"></i> using Django & Bootstrap.</p>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Animations & polish */
+    .hero-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        position: relative;
+    }
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+    .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2) !important;
+    }
+    .feature-card {
+        background: white;
+        transition: all 0.3s ease;
+        border: 1px solid #f0f2f5;
+    }
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.05) !important;
+        border-color: rgba(102, 126, 234, 0.2);
+    }
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+    .feature-card:hover .feature-icon {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    }
+    .feature-card:hover .feature-icon i {
+        color: white !important;
+    }
+    .btn-outline-custom {
+        border: 2px solid #667eea;
+        color: #667eea;
+        background: transparent;
+        transition: all 0.2s;
+    }
+    .btn-outline-custom:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-color: transparent;
+        color: white;
+        transform: translateY(-2px);
+    }
+    /* Hero icon enhancements */
+    .hero-icon-bg {
+        backdrop-filter: blur(4px);
+        transition: transform 0.3s ease;
+    }
+    .hero-icon-bg:hover {
+        transform: scale(1.02);
+    }
+    .floating-icon {
+        position: absolute;
+        animation: float 3s ease-in-out infinite;
+    }
+    .floating-icon:nth-child(2) { animation-delay: 0.5s; }
+    .floating-icon:nth-child(3) { animation-delay: 1s; }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-8px); }
+        100% { transform: translateY(0px); }
+    }
+    .wave-separator {
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        line-height: 0;
+    }
+    .cta-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+    }
+    .cta-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+    }
+    @media (max-width: 768px) {
+        .hero-section .display-3 {
+            font-size: 2.5rem;
+        }
+        .min-vh-75 {
+            min-height: auto;
+            padding: 3rem 0;
+        }
+        .wave-separator {
+            display: none;
+        }
+    }
+    /* Smooth scroll */
+    html {
+        scroll-behavior: smooth;
+    }
+    /* AOS animations (optional, you can include AOS library or just rely on CSS) */
+    [data-aos] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+    [data-aos].aos-animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Simple AOS-like trigger (no external library)
+    document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('[data-aos]');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('aos-animate');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        elements.forEach(el => observer.observe(el));
+    });
+</script>
+{% endblock %}

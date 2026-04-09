@@ -191,7 +191,7 @@ def profile_setting(request):
 
 		user.save()
 		messages.success(request, 'Profile updated')
-		return redirect('profile')
+		return redirect(reverse('profile', kwargs={'username': user.username}))
 
 	return render(request, 'user/profile/profile-setting.html')
 

@@ -10,6 +10,10 @@ from asgiref.sync import async_to_sync
 from django.utils import timezone
 from django.http import JsonResponse
 
+def home_page(request):
+
+	return render(request, 'index.html')
+
 @login_required
 def chat_list(request, friendship_id=None):
 
