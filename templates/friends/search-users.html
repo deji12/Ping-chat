@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ping · Find Friends</title>
+
+    <!-- Bootstrap 5 CSS + Icons + Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+    <!-- ========== NAVBAR (exactly as provided) ========== -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-chat-dots-fill me-2" style="color: #667eea; font-size: 1.5rem;"></i>
+                <span
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">
+                    Ping
+                </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation" style="border: 2px solid #667eea; background: white;">
+                <span class="navbar-toggler-icon"
+                    style="background-image: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3e%3cpath stroke=%27rgba(102, 126, 234, 1)%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3e%3c/svg%3e') !important;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-book-half me-1"></i>Bible</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-people-fill me-1"></i>Friends
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person-check-fill me-2"></i>View friends
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person-plus-fill me-2"></i>Find friends
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-inbox-fill me-2"></i>Friend requests
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-person-circle me-1"></i>Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-gear me-1"></i>Settings</a>
+                    </li>
+                </ul>
+
+                <!-- Desktop Logout Button -->
+                <div class="d-none d-lg-block">
+                    <a class="btn btn-logout" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+                </div>
+                <div class="d-lg-none">
+                    <a class="btn btn-logout w-100" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+                </div>
+
+                <!-- Desktop Login/Signup Buttons (shown when not logged in) -->
+                <div class="d-none d-lg-flex align-items-center gap-2">
+                    <a class="btn btn-outline-primary rounded-3 px-4 py-2" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+                    <a class="btn btn-primary rounded-3 px-4 py-2" href="#"><i class="bi bi-person-plus me-2"></i>Sign Up</a>
+                </div>
+
+                <!-- Mobile Login/Signup Buttons -->
+                <div class="d-lg-none mt-3">
+                    <div class="d-flex flex-column gap-2">
+                        <a class="btn btn-outline-primary w-100 rounded-3 py-2" href="#"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+                        <a class="btn btn-primary w-100 rounded-3 py-2" href="#"><i class="bi bi-person-plus me-2"></i>Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== FIND FRIENDS CONTENT (buttons removed, clickable cards) ========== -->
+    <div class="container py-4">
+        <div class="search-container">
+            <!-- Search header -->
+            <div class="search-header d-flex align-items-center gap-2">
+                <i class="bi bi-search-heart fs-4" style="color: #667eea;"></i>
+                <h2 class="h5 fw-semibold mb-0">Find friends</h2>
+            </div>
+
+            <!-- Search form -->
+            <form id="searchForm">
+                <div class="search-input-group d-flex align-items-center">
+                    <i class="bi bi-search text-muted me-2"></i>
+                    <input type="text" class="form-control" placeholder="Search by name or username..." id="searchInput">
+                    <button class="btn btn-search" type="submit">Search</button>
+                </div>
+            </form>
+
+            <!-- Results count -->
+            <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+                <span class="small text-muted"><i class="bi bi-people me-1"></i> Suggested</span>
+                <span class="badge bg-light text-dark rounded-pill" id="resultCount">4 found</span>
+            </div>
+
+            <!-- Scrollable results container -->
+            <div class="results-scroll" id="resultsContainer">
+                <!-- Each card is clickable (links to profile page) -->
+                <a href="profile.html" class="user-result-card" data-name="Alex Morgan" data-username="alexmorgan" data-bio="Music lover & coffee addict">
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="result-avatar" src="https://ui-avatars.com/api/?background=667eea&color=fff&rounded=true&size=80&bold=true&name=Alex+Morgan" alt="Alex Morgan">
+                        <div class="flex-grow-1">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Alex Morgan</h6>
+                                    <p class="text-muted small mb-0">@alexmorgan</p>
+                                    <p class="text-secondary small mt-1 mb-0"><i class="bi bi-chat-text me-1"></i>Music lover & coffee addict</p>
+                                </div>
+                                <div class="joined-badge">
+                                    <i class="bi bi-calendar3 me-1"></i>Joined Mar 2025
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="profile.html" class="user-result-card" data-name="Sarah Chen" data-username="sarahchen" data-bio="Photography | Travel">
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="result-avatar" src="https://ui-avatars.com/api/?background=764ba2&color=fff&rounded=true&size=80&bold=true&name=Sarah+Chen" alt="Sarah Chen">
+                        <div class="flex-grow-1">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Sarah Chen</h6>
+                                    <p class="text-muted small mb-0">@sarahchen</p>
+                                    <p class="text-secondary small mt-1 mb-0"><i class="bi bi-camera me-1"></i>Photography | Travel</p>
+                                </div>
+                                <div class="joined-badge">
+                                    <i class="bi bi-calendar3 me-1"></i>Joined Jan 2024
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="profile.html" class="user-result-card" data-name="Marcus Lee" data-username="marcuslee" data-bio="Full-stack dev | Open source">
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="result-avatar" src="https://ui-avatars.com/api/?background=667eea&color=fff&rounded=true&size=80&bold=true&name=Marcus+Lee" alt="Marcus Lee">
+                        <div class="flex-grow-1">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Marcus Lee</h6>
+                                    <p class="text-muted small mb-0">@marcuslee</p>
+                                    <p class="text-secondary small mt-1 mb-0"><i class="bi bi-code-slash me-1"></i>Full-stack dev | Open source</p>
+                                </div>
+                                <div class="joined-badge">
+                                    <i class="bi bi-calendar3 me-1"></i>Joined Jun 2023
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="profile.html" class="user-result-card" data-name="Emma Watson" data-username="emmawatson" data-bio="Artist & illustrator">
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="result-avatar" src="https://ui-avatars.com/api/?background=764ba2&color=fff&rounded=true&size=80&bold=true&name=Emma+Watson" alt="Emma Watson">
+                        <div class="flex-grow-1">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">Emma Watson</h6>
+                                    <p class="text-muted small mb-0">@emmawatson</p>
+                                    <p class="text-secondary small mt-1 mb-0"><i class="bi bi-palette me-1"></i>Artist & illustrator</p>
+                                </div>
+                                <div class="joined-badge">
+                                    <i class="bi bi-calendar3 me-1"></i>Joined Sep 2025
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Empty state (hidden by default) -->
+            <div class="text-center py-5 d-none" id="emptyState">
+                <i class="bi bi-people fs-1" style="color: #cbd5e1;"></i>
+                <h6 class="mt-2 text-secondary">No users found</h6>
+                <p class="text-muted small">Try a different name or username</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+
+</html>

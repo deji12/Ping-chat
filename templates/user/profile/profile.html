@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="settings-card p-4 p-md-5">
+
+            <!-- Profile Header: Avatar + Name + Edit Link -->
+            <div class="text-center mb-4">
+                <img class="profile-avatar-large mb-3"
+                    src="{{user_account.get_profile_image}}"
+                    alt="Profile picture">
+                <h2 class="h3 fw-bold mb-1">{{user_account.get_full_name }}</h2>
+                <p class="text-muted">@{{user_account.username}}</p>
+                
+                {% if request.user.username == username %}
+                    <!-- Edit Profile Link (visible only to profile owner) -->
+                    <div class="mt-2">
+                        <a href="{% url 'profile_setting' %}" class="edit-profile-link">
+                            <i class="bi bi-pencil-square me-1"></i> Edit Profile
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Bio Section -->
+            <div class="mb-4 text-center">
+                <p class="lead fs-6 text-secondary">
+                    <i class="bi bi-chat-text-fill me-2" style="color:#667eea;"></i>
+                    {{user_account.bio|default:''}}
+                </p>
+            </div>
+
+            <!-- Stats / Quick info (optional) -->
+            <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
+                <div class="stat-badge"><i class="bi bi-calendar3"></i> {{user_account.date_joined}}</div>
+                <div class="stat-badge"><i class="bi bi-people-fill"></i> {{user_account.number_of_friends}} friend(s)</div>
+            </div>
+
+            {% if not request.user.username == username %}
+                <!-- Friend Action Buttons & Friendship Status -->
+                <div class="friend-action-buttons d-flex flex-wrap justify-content-center gap-3 mt-3 mb-4">
+                    {% if not friendship %}
+                        <!-- When NOT friends and no pending request: -->
+                        <button onclick="window.location.href = '{% url 'add_friend' username %}'" class="btn btn-primary rounded-pill px-4 py-2">
+                            <i class="bi bi-person-plus me-2"></i>Add Friend
+                        </button>
+                    {% elif friendship.status == 'pending' %}
+                        {% if request.user == friendship.to_user %}
+                            <!-- When a friend request was received: -->
+                            <button class="btn btn-success rounded-pill px-4 py-2" onclick="window.location.href = '{% url 'update_friend_request_status' friendship.id %}?status=accepted' ">
+                                <i class="bi bi-check-lg me-2"></i>Accept Request
+                            </button>
+                            <button class="btn btn-outline-secondary rounded-pill px-4 py-2" onclick="window.location.href = '{% url 'update_friend_request_status' friendship.id %}?status=declined' ">
+                                <i class="bi bi-x-lg me-2"></i>Decline
+                            </button>
+                        {% else %}
+                            <button class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                                <i class="bi bi-send-check-fill me-2"></i>Request sent
+                            </button>
+                        {% endif %}
+                    {% elif friendship.status == 'accepted' %}
+                        <!-- When already friends: show "Friends since" stat + Send Message button -->
+                        <div class="d-flex flex-wrap justify-content-center align-items-center gap-3">
+                            <div class="friends-since-badge d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill"
+                                style="background: #e6f9ed; color: #0a5c2e; font-weight: 500;">
+                                <i class="bi bi-calendar-heart-fill"></i>
+                                <span>{{ friendship.friend_request_accept_at }}</span>
+                            </div>
+                            <a href="{% url 'chat_detail' friendship.id %}" class="btn btn-primary rounded-pill px-4 py-2">
+                                <i class="bi bi-chat-dots-fill me-2"></i>Send Message
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Additional info (mutual friends, etc.) -->
+                <!-- <hr class="my-4">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <h5 class="fw-semibold"><i class="bi bi-person-badge me-2" style="color:#667eea;"></i>Mutual Friends</h5>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="badge bg-light text-dark rounded-pill py-2 px-3">Alex Morgan</span>
+                            <span class="badge bg-light text-dark rounded-pill py-2 px-3">Sam Wilson</span>
+                            <span class="badge bg-light text-dark rounded-pill py-2 px-3">Taylor Reed</span>
+                            <span class="badge bg-light text-dark rounded-pill py-2 px-3">Jordan Lee</span>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- Optional: Recent posts or activity (placeholder) -->
+                <hr class="my-4">
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

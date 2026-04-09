@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ping</title>
+
+  <!-- Bootstrap 5 + Icons + Google Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <div class="d-flex align-items-center justify-content-center min-vh-100 py-4 py-md-5">
+    <div class="container" style="max-width: 550px;">
+      <div class="auth-card p-4 p-md-5 p-lg-5">
+        
+        <!-- Header with logo & brand -->
+        <div class="text-center mb-4">
+          <div class="d-flex justify-content-center mb-3">
+            <div class="icon-circle">
+              <i class="bi bi-chat-dots-fill" style="font-size: 2.2rem; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            </div>
+          </div>
+          <h1 class="display-6 fw-bold mb-1">
+            <span class="gradient-text">ping</span>
+          </h1>
+          <p class="text-muted small mb-0">real‑time chat · connect instantly</p>
+        </div>
+
+        <div class="position-relative mx-auto mb-4" style="width: 60px; height: 3px; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 3px;">
+        </div>
+
+        <!-- Alert messages -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+              <b>{{ message }}</b>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% block content %} 
+
+        {% endblock content %}
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    body {
+      padding-top: 0 !important;
+      
+    }
+  </style>
+</body>
+</html>

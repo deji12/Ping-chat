@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ping · Chats</title>
+
+    <!-- Bootstrap 5 CSS + Icons + Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    {% load static %}
+    <!-- Your unified style.css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <style>
+        body {
+            padding-top: 0 !important;
+        }
+    </style>
+</head>
+
+    <body>
+      <div class="chat-app">
+          <!-- Minimal back bar (no main navbar) -->
+          <div class="back-bar">
+              <a href="{% url 'profile' request.user.username %}" id="backToDashboard">
+                  <i class="bi bi-arrow-left-short fs-5"></i> Back to profile
+              </a>
+          </div>
+
+          <div class="panels" id="panels">
+              <!-- LEFT: FRIENDS LIST -->
+              <div class="contacts-panel">
+                  <div class="panel-header">
+                      <h5 class="fw-semibold mb-0">
+                          <i class="bi bi-people-fill me-2" style="color: #667eea"></i>Chats
+                      </h5>
+                      <a
+                          href="{% url 'search_users' %}"
+                          class="btn btn-sm rounded-pill"
+                          style="background: rgba(102, 126, 234, 0.1); color: #667eea"
+                      >
+                          <i class="bi bi-person-plus"></i> New
+                      </a>
+                  </div>
+                  <div class="search-wrapper">
+                      <i class="bi bi-search"></i>
+                      <input type="text" id="searchInput" placeholder="Search friends..." />
+                  </div>
+                  <div class="contacts-list" id="contactsList">
+                    {% for friendship in user_friendships %}
+                      {% if request.user != friendship.to_user %}
+                        <a href="{% url 'chat_detail' friendship.id %}" data-friendship-id="{{ friendship.id }}" class="contact-item friend-chat" id="friendChat">
+                          <img src="{{ friendship.to_user.get_profile_image }}" class="contact-avatar" alt="Alex Morgan">
+                          {% with message=friendship.last_sent_message %}
+                            <div class="contact-info">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <span class="contact-name">{{ friendship.to_user.get_full_name|default:friendship.to_user.username }}</span>
+                                <span class="msg-time">{{ message.sent_at }}</span>
+                              </div>
+                              {% if friendship.number_of_messages_sent > 0 %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                  <div class="last-msg">{{ message.text_content }}</div>
+                                  {% if not message.is_read %}
+                                    <span class="unread-badge">
+                                        <i class="bi bi-bell-fill"></i>
+                                    </span>
+                                  {% endif %}
+                                </div>
+                              {% endif %}
+                            </div>
+                          {% endwith %}
+                        </a>
+                      {% else %}
+                        <a href="{% url 'chat_detail' friendship.id %}" data-friendship-id="{{ friendship.id }}" class="contact-item friend-chat" id="friendChat">
+                          <img src="{{ friendship.from_user.get_profile_image }}" class="contact-avatar" alt="Alex Morgan">
+                          {% with message=friendship.last_sent_message %}
+                            <div class="contact-info">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <span class="contact-name">{{ friendship.from_user.get_full_name|default:friendship.from_user.username }}</span>
+                                <span class="msg-time">{{ message.sent_at }}</span>
+                              </div>
+                              {% if friendship.number_of_messages_sent > 0 %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                  <div class="last-msg">{{ message.text_content }}</div>
+                                  {% if not message.is_read %}
+                                    <span class="unread-badge">
+                                        <i class="bi bi-bell-fill"></i>
+                                    </span>
+                                  {% endif %}
+                                </div>
+                              {% endif %}
+                            </div>
+                          {% endwith %}
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+              </div>
+
+              <!-- RIGHT: CHAT AREA -->
+              {% if friend %} 
+                <div class="chat-panel" id="chatPanel">
+                    <div class="chat-header" id="chatHeader" data-bs-target="#userInfoModal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#userInfoModal"
+                    data-joined="{{ friend.date_joined|date:"F jS Y" }}"
+                    data-bio="{{ friend.bio|default:'' }}"
+                    data-friends-since="{{ friendship.friend_request_accept_at|date:'F jS Y'|default:'Recently' }}"
+                    >
+                        <button class="back-btn" id="backBtn"><i class="bi bi-arrow-left"></i></button>
+                        <img src="{{ friend.get_profile_image }}" id="chatAvatar" class="contact-avatar" style="width: 44px; height: 44px" />
+                        <div>
+                            <h6 class="fw-semibold mb-0" id="chatName">{{ friend.get_full_name }}</h6>
+                            <small class="text-muted" id="chatStatus">click to view profile</small>
+                        </div>
+                    </div>
+
+                    <div class="messages-container" id="messagesContainer">
+                        {% if friendship.number_of_messages_sent > 0 %}
+                          {% for message in friendship_messages %}
+                            {% if message.sent_by == request.user %}
+                              <div class="message-row">
+                                <div class="message-bubble sent">
+                                  <div class="message-text">{{ message.text_content }}</div>
+                                  {% if message.image %}
+                                    <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
+                                  {% endif %}
+                                  <div class="message-meta">
+                                    <span>{{ message.sent_at }}</span>
+                                    <i class="bi bi-check2-all"></i>
+                                  </div>
+                                </div>
+                              </div>
+                            {% else %}
+                              <div class="message-row">
+                                <div class="message-bubble received">
+                                  <div class="message-sender">{{ message.sent_by.get_full_name|default:message.sent_by.username }}</div>
+                                  <div class="message-text">{{ message.text_content }}</div>
+                                  {% if message.image %}
+                                    <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
+                                  {% endif %}
+                                  <div class="message-meta">
+                                    <span>{{ message.sent_at }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
+                        {% else %}
+                          <div class="text-center text-muted py-5">Select a conversation from the left</div>
+                        {% endif %}
+                    </div>
+
+                    <form method="POST" id="messageForm">
+                      <div class="input-area">
+                          <label for="fileInput" class="attach-btn"><i class="bi bi-paperclip"></i></label>
+                          <input type="file" id="fileInput" style="display: none" accept="image/*" />
+                          <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" />
+                          <button class="send-btn" id="sendBtn"><i class="bi bi-send-fill"></i></button>
+                      </div>
+                    </form>
+                </div>
+              {% else %}
+                <div class="chat-panel" id="chatPanel">
+                  <div class="chat-header" id="chatHeader">
+                      <button class="back-btn" id="backBtn"><i class="bi bi-arrow-left"></i></button>
+                      <img src="{{ default_profile_image }}" id="chatAvatar" class="contact-avatar" style="width: 44px; height: 44px" />
+                      <div>
+                          <h6 class="fw-semibold mb-0" id="chatName">Select a friend</h6>
+                          <small class="text-muted" id="chatStatus">click to view profile</small>
+                      </div>
+                  </div>
+
+                  <div class="messages-container" id="messagesContainer">
+                      <div class="text-center text-muted py-5">Select a conversation from the left</div>
+                  </div>
+                </div>
+              {% endif %}
+          </div>
+      </div>
+
+      <!-- User Info Modal (profile) -->
+      <div class="modal fade" id="userInfoModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content p-4">
+                  <div class="modal-header border-0 pb-0">
+                      <h5 class="modal-title fw-bold">Contact Info</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body text-center">
+                      <img src="" id="modalAvatar" class="profile-img-large mx-auto d-block" alt="profile" />
+                      <h5 class="fw-bold mt-3" id="modalFullName"></h5>
+                      <p class="text-muted small" id="modalBio"></p>
+                      <div class="mt-4 text-start">
+                          <div class="d-flex align-items-center gap-3 mb-3">
+                              <i class="bi bi-calendar3" style="color: #667eea"></i>
+                              <div>
+                                  <small class="text-muted">Joined</small>
+                                  <div id="modalJoined" class="fw-medium"></div>
+                              </div>
+                          </div>
+                          <div class="d-flex align-items-center gap-3">
+                              <i class="bi bi-calendar-heart" style="color: #667eea"></i>
+                              <div>
+                                  <small class="text-muted">Friends since</small>
+                                  <div id="modalFriendsSince" class="fw-medium"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Image Preview Modal (WhatsApp style) -->
+      <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content rounded-4">
+                  <div class="modal-header border-0 pb-0">
+                      <h5 class="modal-title fw-bold">Preview</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <form method="POST" id="messageForm">
+                    {% csrf_token %}
+                    <div class="modal-body p-4 text-center">
+                        <img id="previewImage" src="" alt="Image preview" class="img-fluid rounded-3" style="max-height: 60vh; object-fit: contain;">
+                        <div class="mt-3">
+                            <label class="form-label small text-muted">Add a caption</label>
+                            <input type="text" id="captionInput" class="form-control rounded-pill" placeholder="Caption (optional)" autocomplete="off">
+                        </div>
+                        <input type="file" id="fileInput" style="display: none" accept="image/*" />
+                        <input type="hidden" id="friendshipId" value="{{ friendship.id }}">
+                    </div>
+                    <div class="modal-footer border-0 pt-0 pb-4">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" id="sendImageBtn" class="btn btn-primary rounded-pill px-4">Send <i class="bi bi-send-fill ms-1"></i></button>
+                    </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="{% static 'js/chat.js' %}"></script>
+      
+        <script>
+          const messageContainer = document.getElementById('messagesContainer');
+          const messageForm = document.getElementById('messageForm');
+          const messageBox = document.getElementById('messageInput');
+          const contactsList = document.getElementById('contactsList');
+
+          {% if friendship %}
+            function connectMessageWebSocket() {
+              const messageWebsocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+              const messageWsEndpoint = `${messageWebsocketProtocol}://${window.location.host}/chat/{{ friendship.id }}/`;
+              const messageSocket = new WebSocket(messageWsEndpoint);
+
+              messageSocket.onclose = (event) => {
+                setTimeout(connectMessageWebSocket, 5000);
+              };
+
+              function add_message(message) {
+                var newChat = null;
+                const sentAt = new Date(message.sent_at);
+                const displayTime = sentAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                 
+                if (message.sender_id === '{{ request.user.id }}') {
+                  newChat = `
+                    <div class="message-row">
+                      <div class="message-bubble sent">
+                        <div class="message-text">${message.message}</div>
+                  `
+
+                  if (message.message_type === 'image_text') {
+                    newChat += `<img src="${message.image_url}" class="message-image" onclick="window.open(this.src)" alt="image">`
+                  }
+
+                  newChat += `
+                        <div class="message-meta">
+                          <span>${displayTime}</span>
+                          <i class="bi bi-check2-all"></i>
+                        </div>
+                      </div>
+                    </div>
+                  `
+                } else {
+                    newChat = `
+                      <div class="message-row">
+                        <div class="message-bubble received">
+                          <div class="message-text">${message.message}</div>
+                    `
+
+                    if (message.message_type === 'image_text') {
+                      newChat += `<img src="${message.image_url}" class="message-image" onclick="window.open(this.src)" alt="image">`
+                    }
+
+                    newChat += `
+                          <div class="message-meta">
+                            <span>${displayTime}</span>
+                            <i class="bi bi-check2-all"></i>
+                          </div>
+                        </div>
+                      </div>
+                    `
+                  }
+                
+                messageContainer.innerHTML += newChat;
+                scrollToBottom();
+              }
+
+              messageSocket.onopen = (event) => {
+                console.log("WebSocket connection opened!");
+                messageForm.addEventListener('submit', (e) => {
+                  e.preventDefault();
+                  console.log('submitted')
+                  messageSocket.send(
+                    JSON.stringify({
+                      'message': messageBox.value,
+                      'sender_id': '{{ request.user.id }}',
+                      'message_type': 'text'
+                    })
+                  );
+                  messageForm.reset();
+                });
+              };
+
+              messageSocket.onmessage = (event) => {
+                const messageData = JSON.parse(event.data)['data'];
+                add_message(messageData);
+                scrollToBottom();
+              }
+
+              messageSocket.onclose = (event) => {
+                console.log("WebSocket connection closed!");
+              };
+            }
+            connectMessageWebSocket();
+          {% endif %}
+
+          function connectChatListWebSocket() {
+            const chatListWebsocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+            const chatListWsEndpoint = `${chatListWebsocketProtocol}://${window.location.host}/chat/`;
+            const chatListSocket = new WebSocket(chatListWsEndpoint);
+
+            chatListSocket.onclose = (event) => {
+              setTimeout(connectChatListWebSocket, 5000);
+            };
+
+            chatListSocket.onopen = (event) => {
+              console.log("WebSocket connection opened from chat list!");
+            };
+
+            function moveChatToTop(message) {
+              if (message.friendship_id === window.location.href.split('/').at(-2)) {
+                return
+              } 
+              const chatElement = document.querySelector(
+                `.friend-chat[data-friendship-id="${message.friendship_id}"]`
+              );
+
+              if (!chatElement) return;
+
+              // 1. Move to top
+              contactsList.prepend(chatElement);
+
+              // 2. Update last message text
+              const lastMsg = chatElement.querySelector(".last-msg");
+              if (lastMsg) {
+                lastMsg.textContent = message.message;
+              }
+
+              // 3. Update time
+              const msgTime = chatElement.querySelector(".msg-time");
+              if (msgTime) {
+                const date = new Date(message.sent_at);
+
+                // simple time format (e.g. 18:29)
+                msgTime.textContent = date.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+              }
+
+              // 4. Add unread badge if not already present
+              const existingBadge = chatElement.querySelector(".unread-badge");
+
+              if (!existingBadge) {
+                const badge = document.createElement("span");
+                badge.className = "unread-badge";
+                badge.innerHTML = `<i class="bi bi-bell-fill"></i>`;
+
+                // append to the right place
+                const msgRow = chatElement.querySelector(
+                  ".last-msg"
+                )?.parentElement;
+
+                if (msgRow) {
+                  msgRow.appendChild(badge);
+                }
+              }
+            }
+
+            chatListSocket.onmessage = (event) => {
+              const messageData = JSON.parse(event.data)['data'];
+              console.log(messageData);
+              moveChatToTop(messageData);
+            }
+          }
+
+          
+          connectChatListWebSocket();
+          scrollToBottom();
+        </script>
+    </body>
+</html>

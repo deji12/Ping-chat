@@ -1,0 +1,60 @@
+{% extends 'user/auth/base.html' %}
+{% block content %}
+  
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <div class="bg-primary bg-opacity-10 p-2 rounded-3">
+      <i class="bi bi-person-plus-fill fs-4" style="color: #667eea;"></i>
+    </div>
+    <div>
+      <h2 class="h4 mb-0 fw-semibold" style="color: #1e293b;">Create account</h2>
+      <p class="text-muted small mb-0">join the ping community</p>
+    </div>
+  </div>
+
+  <!-- Registration Form -->
+  <form id="registerForm" method="POST">
+    {% csrf_token %}
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-sm-6">
+        <label class="form-label"><i class="bi bi-person"></i> First name</label>
+        <input type="text" class="form-control" id="firstName" name="first_name" placeholder="e.g., Alex" required value="{{request.GET.first_name|default:''}}">
+      </div>
+      <div class="col-12 col-sm-6">
+        <label class="form-label"><i class="bi bi-person-badge"></i> Last name</label>
+        <input type="text" class="form-control" id="lastName" name="last_name" placeholder="e.g., Morgan" required value="{{request.GET.last_name|default:''}}">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-at"></i> Username</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="@username" required value="{{request.GET.username|default:''}}"
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-envelope-fill"></i> Email address</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="hello@ping.com" required value="{{request.GET.email|default:''}}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><i class="bi bi-lock-fill"></i> Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" minlength="6" required>
+      <div class="form-text text-muted">at least 6 characters</div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label"><i class="bi bi-shield-check"></i> Confirm password</label>
+      <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="confirm password" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm" id="registerBtn">
+      <i class="bi bi-person-plus me-2"></i> Create account
+    </button>
+
+    <div class="text-center mt-4 pt-2">
+      <p class="mb-0 text-muted small">
+        Already have an account? 
+        <a href="{% url 'login_user' %}" id="loginRedirectLink" class="fw-semibold" style="color: #667eea;">Sign in →</a>
+      </p>
+    </div>
+  </form>
+{% endblock content %}
