@@ -169,10 +169,6 @@ EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
-<<<<<<< HEAD
 
 ZEGO_APP_ID = config('ZEGO_APP_ID', cast=int)
 ZEGO_SERVER_SECRET = config('ZEGO_SERVER_SECRET')
-=======
-LOGIN_URL = 'login_user'
->>>>>>> a0fd7403df647d6ac74598fb39171a1c2e3d86b9
