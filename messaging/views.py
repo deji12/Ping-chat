@@ -9,6 +9,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 from django.http import JsonResponse
+from .utils import generate_token
 
 def home_page(request):
 
@@ -43,6 +44,8 @@ def chat_list(request, friendship_id=None):
 		context['friendship'] = friendship
 		context['friendship_messages'] = friendship.get_messages()
 		context['friend'] = friendship.get_friend(user)
+		context['zego_token'] = generate_token(str(user.id), str(friendship_id))
+		context['zego_app_id'] = settings.ZEGO_APP_ID
 
 	return render(request, 'chat/chat.html', context)
 

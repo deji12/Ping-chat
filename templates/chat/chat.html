@@ -104,65 +104,76 @@
               <!-- RIGHT: CHAT AREA -->
               {% if friend %} 
                 <div class="chat-panel" id="chatPanel">
-                    <div class="chat-header" id="chatHeader" data-bs-target="#userInfoModal"
-                    data-bs-toggle="modal"
-                    data-bs-target="#userInfoModal"
-                    data-joined="{{ friend.date_joined|date:"F jS Y" }}"
-                    data-bio="{{ friend.bio|default:'' }}"
-                    data-friends-since="{{ friendship.friend_request_accept_at|date:'F jS Y'|default:'Recently' }}"
-                    >
-                        <button class="back-btn" id="backBtn"><i class="bi bi-arrow-left"></i></button>
-                        <img src="{{ friend.get_profile_image }}" id="chatAvatar" class="contact-avatar" style="width: 44px; height: 44px" />
-                        <div>
-                            <h6 class="fw-semibold mb-0" id="chatName">{{ friend.get_full_name }}</h6>
-                            <small class="text-muted" id="chatStatus">click to view profile</small>
-                        </div>
-                    </div>
+                  <div id="root"></div>
 
-                    <div class="messages-container" id="messagesContainer">
-                        {% if friendship.number_of_messages_sent > 0 %}
-                          {% for message in friendship_messages %}
-                            {% if message.sent_by == request.user %}
-                              <div class="message-row">
-                                <div class="message-bubble sent">
-                                  <div class="message-text">{{ message.text_content }}</div>
-                                  {% if message.image %}
-                                    <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
-                                  {% endif %}
-                                  <div class="message-meta">
-                                    <span>{{ message.sent_at }}</span>
-                                    <i class="bi bi-check2-all"></i>
-                                  </div>
-                                </div>
-                              </div>
-                            {% else %}
-                              <div class="message-row">
-                                <div class="message-bubble received">
-                                  <div class="message-sender">{{ message.sent_by.get_full_name|default:message.sent_by.username }}</div>
-                                  <div class="message-text">{{ message.text_content }}</div>
-                                  {% if message.image %}
-                                    <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
-                                  {% endif %}
-                                  <div class="message-meta">
-                                    <span>{{ message.sent_at }}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            {% endif %}
-                          {% endfor %}
-                        {% else %}
-                          <div class="text-center text-muted py-5">Select a conversation from the left</div>
-                        {% endif %}
-                    </div>
-
-                    <form method="POST" id="messageForm">
-                      <div class="input-area">
-                          <label for="fileInput" class="attach-btn"><i class="bi bi-paperclip"></i></label>
-                          <input type="file" id="fileInput" style="display: none" accept="image/*" />
-                          <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" />
-                          <button class="send-btn" id="sendBtn"><i class="bi bi-send-fill"></i></button>
+                  <div class="chat-header d-flex align-items-center justify-content-between" id="chatHeader">
+                      
+                      <!-- Left group: back + avatar + name (no change) -->
+                      <div class="d-flex align-items-center gap-2">
+                          <button class="back-btn" id="backBtn"><i class="bi bi-arrow-left"></i></button>
+                          <img src="{{ friend.get_profile_image }}" id="chatAvatar" class="contact-avatar" style="width:44px;height:44px">
+                          <div data-bs-target="#userInfoModal" data-bs-toggle="modal"
+                           data-joined="{{ friend.date_joined|date:"F jS Y" }}"
+                           data-bio="{{ friend.bio|default:'' }}"
+                           data-friends-since="{{ friendship.friend_request_accept_at|date:'F jS Y'|default:'Recently' }}">
+                              <h6 class="fw-semibold mb-0" id="chatName">{{ friend.get_full_name }}</h6>
+                              <small class="text-muted" id="chatStatus">click to view profile</small>
+                          </div>
                       </div>
-                    </form>
+
+                      <!-- Video call button – refined spacing and style -->
+                      <div class="ms-2">
+                          <button onclick="invite()" class="btn btn-sm rounded-circle p-1" id="videoCallBtn"
+                                  style="background: transparent; color:#667eea; width:36px; height:36px; border:0.5px solid rgba(102,126,234,0.3); transition:all 0.2s;">
+                              <i class="bi bi-camera-video-fill fs-6"></i>
+                          </button>
+                      </div>
+                  </div>
+
+                  <div class="messages-container" id="messagesContainer">
+                      {% if friendship.number_of_messages_sent > 0 %}
+                        {% for message in friendship_messages %}
+                          {% if message.sent_by == request.user %}
+                            <div class="message-row">
+                              <div class="message-bubble sent">
+                                <div class="message-text">{{ message.text_content }}</div>
+                                {% if message.image %}
+                                  <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
+                                {% endif %}
+                                <div class="message-meta">
+                                  <span>{{ message.sent_at }}</span>
+                                  <i class="bi bi-check2-all"></i>
+                                </div>
+                              </div>
+                            </div>
+                          {% else %}
+                            <div class="message-row">
+                              <div class="message-bubble received">
+                                <div class="message-sender">{{ message.sent_by.get_full_name|default:message.sent_by.username }}</div>
+                                <div class="message-text">{{ message.text_content }}</div>
+                                {% if message.image %}
+                                  <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
+                                {% endif %}
+                                <div class="message-meta">
+                                  <span>{{ message.sent_at }}</span>
+                                </div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      {% else %}
+                        <div class="text-center text-muted py-5">Select a conversation from the left</div>
+                      {% endif %}
+                  </div>
+
+                  <form method="POST" id="messageForm">
+                    <div class="input-area">
+                        <label for="fileInput" class="attach-btn"><i class="bi bi-paperclip"></i></label>
+                        <input type="file" id="fileInput" style="display: none" accept="image/*" />
+                        <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" />
+                        <button class="send-btn" id="sendBtn"><i class="bi bi-send-fill"></i></button>
+                    </div>
+                  </form>
                 </div>
               {% else %}
                 <div class="chat-panel" id="chatPanel">
@@ -244,32 +255,90 @@
       </div>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
       <script src="{% static 'js/chat.js' %}"></script>
+      <script src="https://unpkg.com/zego-zim-web@2.16.0/index.js"></script>
+      <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
       
-        <script>
-          const messageContainer = document.getElementById('messagesContainer');
-          const messageForm = document.getElementById('messageForm');
-          const messageBox = document.getElementById('messageInput');
-          const contactsList = document.getElementById('contactsList');
+      <script>
 
-          {% if friendship %}
-            function connectMessageWebSocket() {
-              const messageWebsocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-              const messageWsEndpoint = `${messageWebsocketProtocol}://${window.location.host}/chat/{{ friendship.id }}/`;
-              const messageSocket = new WebSocket(messageWsEndpoint);
+        const roomID = "{{ friendship.id }}";
+        const userID = "{{ request.user.id }}";
+        const userName = "{{ request.user.username }}";
+        const appID = {{ zego_app_id }};           
+        const serverToken = "{{ zego_token }}";   
+        
+        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+          appID,
+          serverToken,
+          roomID,
+          userID,
+          userName
+        );
 
-              messageSocket.onclose = (event) => {
-                setTimeout(connectMessageWebSocket, 5000);
-              };
+        const zp = ZegoUIKitPrebuilt.create(kitToken);
+        zp.addPlugins({ ZIM });
 
-              function add_message(message) {
-                var newChat = null;
-                const sentAt = new Date(message.sent_at);
-                const displayTime = sentAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                 
-                if (message.sender_id === '{{ request.user.id }}') {
+        function invite() {
+         const targetUser = {
+              userID:'{{ friend.id }}',
+              userName:'{{ friend.username }}'
+          };
+          zp.sendCallInvitation({
+            callees: [targetUser],
+            callType: ZegoUIKitPrebuilt.InvitationTypeVideoCall,
+            timeout: 60, 
+           }).then((res) => {
+            console.warn(res);
+           })
+           .catch((err) => {
+           console.warn(err);
+         });
+        }
+
+
+
+        const messageContainer = document.getElementById('messagesContainer');
+        const messageForm = document.getElementById('messageForm');
+        const messageBox = document.getElementById('messageInput');
+        const contactsList = document.getElementById('contactsList');
+
+        {% if friendship %}
+          function connectMessageWebSocket() {
+            const messageWebsocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+            const messageWsEndpoint = `${messageWebsocketProtocol}://${window.location.host}/chat/{{ friendship.id }}/`;
+            const messageSocket = new WebSocket(messageWsEndpoint);
+
+            messageSocket.onclose = (event) => {
+              setTimeout(connectMessageWebSocket, 5000);
+            };
+
+            function add_message(message) {
+              var newChat = null;
+              const sentAt = new Date(message.sent_at);
+              const displayTime = sentAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+               
+              if (message.sender_id === '{{ request.user.id }}') {
+                newChat = `
+                  <div class="message-row">
+                    <div class="message-bubble sent">
+                      <div class="message-text">${message.message}</div>
+                `
+
+                if (message.message_type === 'image_text') {
+                  newChat += `<img src="${message.image_url}" class="message-image" onclick="window.open(this.src)" alt="image">`
+                }
+
+                newChat += `
+                      <div class="message-meta">
+                        <span>${displayTime}</span>
+                        <i class="bi bi-check2-all"></i>
+                      </div>
+                    </div>
+                  </div>
+                `
+              } else {
                   newChat = `
                     <div class="message-row">
-                      <div class="message-bubble sent">
+                      <div class="message-bubble received">
                         <div class="message-text">${message.message}</div>
                   `
 
@@ -285,133 +354,114 @@
                       </div>
                     </div>
                   `
-                } else {
-                    newChat = `
-                      <div class="message-row">
-                        <div class="message-bubble received">
-                          <div class="message-text">${message.message}</div>
-                    `
-
-                    if (message.message_type === 'image_text') {
-                      newChat += `<img src="${message.image_url}" class="message-image" onclick="window.open(this.src)" alt="image">`
-                    }
-
-                    newChat += `
-                          <div class="message-meta">
-                            <span>${displayTime}</span>
-                            <i class="bi bi-check2-all"></i>
-                          </div>
-                        </div>
-                      </div>
-                    `
-                  }
-                
-                messageContainer.innerHTML += newChat;
-                scrollToBottom();
-              }
-
-              messageSocket.onopen = (event) => {
-                console.log("WebSocket connection opened!");
-                messageForm.addEventListener('submit', (e) => {
-                  e.preventDefault();
-                  console.log('submitted')
-                  messageSocket.send(
-                    JSON.stringify({
-                      'message': messageBox.value,
-                      'sender_id': '{{ request.user.id }}',
-                      'message_type': 'text'
-                    })
-                  );
-                  messageForm.reset();
-                });
-              };
-
-              messageSocket.onmessage = (event) => {
-                const messageData = JSON.parse(event.data)['data'];
-                add_message(messageData);
-                scrollToBottom();
-              }
-
-              messageSocket.onclose = (event) => {
-                console.log("WebSocket connection closed!");
-              };
-            }
-            connectMessageWebSocket();
-          {% endif %}
-
-          function connectChatListWebSocket() {
-            const chatListWebsocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-            const chatListWsEndpoint = `${chatListWebsocketProtocol}://${window.location.host}/chat/`;
-            const chatListSocket = new WebSocket(chatListWsEndpoint);
-
-            chatListSocket.onclose = (event) => {
-              setTimeout(connectChatListWebSocket, 5000);
-            };
-
-            chatListSocket.onopen = (event) => {
-              console.log("WebSocket connection opened from chat list!");
-            };
-
-            function moveChatToTop(message) {
-              if (message.friendship_id === window.location.href.split('/').at(-2)) {
-                return
-              } 
-              const chatElement = document.querySelector(
-                `.friend-chat[data-friendship-id="${message.friendship_id}"]`
-              );
-
-              if (!chatElement) return;
-
-              // 1. Move to top
-              contactsList.prepend(chatElement);
-
-              // 2. Update last message text
-              const lastMsg = chatElement.querySelector(".last-msg");
-              if (lastMsg) {
-                lastMsg.textContent = message.message;
-              }
-
-              // 3. Update time
-              const msgTime = chatElement.querySelector(".msg-time");
-              if (msgTime) {
-                const date = new Date(message.sent_at);
-
-                // simple time format (e.g. 18:29)
-                msgTime.textContent = date.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                });
-              }
-
-              // 4. Add unread badge if not already present
-              const existingBadge = chatElement.querySelector(".unread-badge");
-
-              if (!existingBadge) {
-                const badge = document.createElement("span");
-                badge.className = "unread-badge";
-                badge.innerHTML = `<i class="bi bi-bell-fill"></i>`;
-
-                // append to the right place
-                const msgRow = chatElement.querySelector(
-                  ".last-msg"
-                )?.parentElement;
-
-                if (msgRow) {
-                  msgRow.appendChild(badge);
                 }
-              }
+              
+              messageContainer.innerHTML += newChat;
+              scrollToBottom();
             }
 
-            chatListSocket.onmessage = (event) => {
+            messageSocket.onopen = (event) => {
+              console.log("WebSocket connection opened!");
+              messageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                console.log('submitted')
+                messageSocket.send(
+                  JSON.stringify({
+                    'message': messageBox.value,
+                    'sender_id': '{{ request.user.id }}',
+                    'message_type': 'text'
+                  })
+                );
+                messageForm.reset();
+              });
+            };
+
+            messageSocket.onmessage = (event) => {
               const messageData = JSON.parse(event.data)['data'];
-              console.log(messageData);
-              moveChatToTop(messageData);
+              add_message(messageData);
+              scrollToBottom();
+            }
+
+            messageSocket.onclose = (event) => {
+              console.log("WebSocket connection closed!");
+            };
+          }
+          connectMessageWebSocket();
+        {% endif %}
+
+        function connectChatListWebSocket() {
+          const chatListWebsocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+          const chatListWsEndpoint = `${chatListWebsocketProtocol}://${window.location.host}/chat/`;
+          const chatListSocket = new WebSocket(chatListWsEndpoint);
+
+          chatListSocket.onclose = (event) => {
+            setTimeout(connectChatListWebSocket, 5000);
+          };
+
+          chatListSocket.onopen = (event) => {
+            console.log("WebSocket connection opened from chat list!");
+          };
+
+          function moveChatToTop(message) {
+            if (message.friendship_id === window.location.href.split('/').at(-2)) {
+              return
+            } 
+            const chatElement = document.querySelector(
+              `.friend-chat[data-friendship-id="${message.friendship_id}"]`
+            );
+
+            if (!chatElement) return;
+
+            // 1. Move to top
+            contactsList.prepend(chatElement);
+
+            // 2. Update last message text
+            const lastMsg = chatElement.querySelector(".last-msg");
+            if (lastMsg) {
+              lastMsg.textContent = message.message;
+            }
+
+            // 3. Update time
+            const msgTime = chatElement.querySelector(".msg-time");
+            if (msgTime) {
+              const date = new Date(message.sent_at);
+
+              // simple time format (e.g. 18:29)
+              msgTime.textContent = date.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+            }
+
+            // 4. Add unread badge if not already present
+            const existingBadge = chatElement.querySelector(".unread-badge");
+
+            if (!existingBadge) {
+              const badge = document.createElement("span");
+              badge.className = "unread-badge";
+              badge.innerHTML = `<i class="bi bi-bell-fill"></i>`;
+
+              // append to the right place
+              const msgRow = chatElement.querySelector(
+                ".last-msg"
+              )?.parentElement;
+
+              if (msgRow) {
+                msgRow.appendChild(badge);
+              }
             }
           }
 
-          
-          connectChatListWebSocket();
-          scrollToBottom();
-        </script>
+          chatListSocket.onmessage = (event) => {
+            const messageData = JSON.parse(event.data)['data'];
+            console.log(messageData);
+            moveChatToTop(messageData);
+          }
+        }
+
+        
+        connectChatListWebSocket();
+        scrollToBottom();
+      </script>
     </body>
 </html>

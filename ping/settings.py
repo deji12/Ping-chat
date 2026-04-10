@@ -168,3 +168,7 @@ EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+
+ZEGO_APP_ID = config('ZEGO_APP_ID', cast=int)
+ZEGO_SERVER_SECRET = config('ZEGO_SERVER_SECRET')
