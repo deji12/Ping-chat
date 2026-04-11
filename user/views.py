@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from friend.models import Friendship
+from django.conf import settings
 
 def register_user(request):
 	user = request.user
@@ -94,9 +95,16 @@ def forgot_password(request):
 		PasswordResetCode.objects.filter(user=user).delete()
 
 		password_reset = PasswordResetCode.objects.create(user=user)
+
+		reset_url = None
+		if settings.DEPLOYED_ON != 'local':
+			reset_url = f'https://pingg.site{reverse('reset_password', kwargs={'reset_id': password_reset.reset_id})}'
+		else:
+			reset_url = request.build_absolute_uri(reverse('reset_password', kwargs={'reset_id': password_reset.reset_id}))
+		
 		user.send_password_reset_email(
 			request, 
-			request.build_absolute_uri(reverse('reset_password', kwargs={'reset_id': password_reset.reset_id})),
+			reset_url,
 			password_reset.reset_id
 		)
 
