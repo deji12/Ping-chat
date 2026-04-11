@@ -24,17 +24,26 @@ def add_friend(request, friend_username):
 
 	friendship = Friendship.objects.filter(
 		Q(from_user=user, to_user=friend) |
-		Q(from_user=friend, to_user=user)
-	).distinct().first()
+		Q(from_user=friend, to_user=user),
+	).distinct().exclude(status=FriendshipStatus.deleted)
 
-	if not friendship:
-		friendship = Friendship.objects.create(
-			from_user = user,
-			to_user = friend
-		)
-		messages.success(request, 'Friend request sent successfully')
+	# check to see if the recipient of this request already sent a friend request to user
+	pending_acceptance = friendship.filter(status=FriendshipStatus.pending).first()
+	if pending_acceptance and pending_acceptance.sender != user:
+		pending_acceptance.status = FriendshipStatus.accepted
+		pending_acceptance.save(update_fields=['status'])
+		messages.success(request, 'Friendship created successfully')
+
 	else:
-		messages.error(request, f'You are already friends with {friend_username}')	
+		if not friendship:
+			friendship = Friendship.objects.create(
+				from_user = user,
+				to_user = friend
+			)
+			messages.success(request, 'Friend request sent successfully')
+
+		else:
+			messages.error(request, f'You are already friends with {friend_username}')	
 	return redirect(reverse('profile', kwargs={'username': friend_username}))
 
 @login_required
@@ -103,3 +112,23 @@ def friends(request):
 		'friends': friends
 	}
 	return render(request, 'friends/friends.html',context)
+
+@login_required
+def delete_friendship(request, friendship_id):
+
+	user = request.user
+	friendship = Friendship.objects.filter(
+		Q(to_user=user) | Q(from_user=user),
+		id=friendship_id,
+		status=FriendshipStatus.accepted
+	).first()
+
+	if not friendship:
+		messages.error(request, 'Friendship not found')
+		return redirect(request.META.get('HTTP_REFERER', '/'))
+
+	friendship.status = FriendshipStatus.deleted
+	friendship.save(update_fields=['status'])
+
+	messages.success(request, 'Friendship deleted successfully')
+	return redirect('friends')

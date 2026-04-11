@@ -35,30 +35,39 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
 	async def receive(self, text_data):
-		data = json.loads(text_data)
-		print(data)
-		sender_id = data.get('sender_id')
-		message_type = data.get('message_type')
+	    data = json.loads(text_data)
+	    sender_id = data.get('sender_id')
+	    message_type = data.get('message_type')
+	    reply_to_id = data.get('reply_to_id')  # ✅ NEW
 
-		if message_type == 'text':
-			message = data.get('message')
-			await self.create_message(sender_id, message)
-			payload = {
-				'type': 'send_message',
-				'data': {
-					'message_type': message_type,
-					'sender_id': sender_id,
-					'message': message,
-					'sent_at': timezone.now().isoformat(),
-					'recipient_id': self.get_recipient_user_id(),
-					'friendship_id': f'{self.friendship.id}'
-				}
-			}
-			await self.channel_layer.group_send(self.room_name, payload)
+	    print(data)
 
-		else:
-			await self.send(text_data=json.dumps({'error': 'Invalid message_type'}))
-			return
+	    if message_type == 'text':
+	        message = data.get('message')
+	        created_msg = await self.create_message(sender_id, message, reply_to_id)  # ✅ pass reply
+	        
+	        # Build reply preview to broadcast
+	        reply_preview = None
+	        if reply_to_id:
+	            reply_preview = await self.get_reply_preview(reply_to_id)
+
+	        payload = {
+	            'type': 'send_message',
+	            'data': {
+	                'message_type': message_type,
+	                'sender_id': sender_id,
+	                'message': message,
+	                'message_id': created_msg.id,
+	                'sent_at': timezone.now().isoformat(),
+	                'recipient_id': str(self.get_recipient_user_id()),
+	                'friendship_id': f'{self.friendship.id}',
+	                'reply_preview': reply_preview,  # ✅ NEW
+	            }
+	        }
+	        await self.channel_layer.group_send(self.room_name, payload)
+	    else:
+	        await self.send(text_data=json.dumps({'error': 'Invalid message_type'}))
+	        return
 
 	async def send_message(self, event):
 	    data = event["data"]
@@ -87,14 +96,37 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		return self.user.id == self.friendship.from_user_id or self.user.id == self.friendship.to_user_id
 
 	@database_sync_to_async
-	def create_message(self, sender_id, message):
-		Message.objects.create(
-			friendship = self.friendship,
-			text_content = message,
-			sent_by = self.user if self.user.id == sender_id else User.objects.get(id=sender_id)
-		)
-		self.friendship.number_of_messages_sent += 1
-		self.friendship.save()
+	def create_message(self, sender_id, message, reply_to_id=None):
+	    reply_to = None
+	    if reply_to_id:
+	        try:
+	            reply_to = Message.objects.get(id=reply_to_id)
+	        except Message.DoesNotExist:
+	            pass
+
+	    msg = Message.objects.create(
+	        friendship=self.friendship,
+	        text_content=message,
+	        sent_by=self.user if self.user.id == int(sender_id) else User.objects.get(id=sender_id),
+	        reply_to=reply_to,  # ✅ NEW
+	    )
+	    self.friendship.number_of_messages_sent += 1
+	    self.friendship.save()
+	    return msg
+
+	@database_sync_to_async
+	def get_reply_preview(self, reply_to_id):
+	    try:
+	        msg = Message.objects.select_related('sent_by').get(id=reply_to_id)
+	        return {
+	            'sender_name': msg.sent_by.get_full_name() or msg.sent_by.username,
+	            'text': (msg.text_content or '')[:80],
+	            'has_image': bool(msg.image),
+	            'image_url': msg.image_url() if msg.image else None,
+	            'id': msg.id,
+	        }
+	    except Message.DoesNotExist:
+	        return None
 
 class ChatListConsumer(AsyncWebsocketConsumer):
 

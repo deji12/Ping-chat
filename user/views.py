@@ -233,7 +233,6 @@ def profile(request, username):
 @login_required
 def search_users(request):
 
-	context = {}
 	if request.method == 'POST':
 		search = request.POST.get('search')
 
@@ -250,5 +249,9 @@ def search_users(request):
 			'users': users,
 			'count': users.count()
 		}
+
+	context = {
+		'users': User.objects.all().order_by('-id')[:10]
+	}
 
 	return render(request, 'user/search-users.html', context)

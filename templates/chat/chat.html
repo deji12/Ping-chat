@@ -16,10 +16,94 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
     <style>
-        body {
-            padding-top: 0 !important;
-        }
-    </style>
+      body { padding-top: 0 !important; }
+
+      /* ── Reply quote block inside a bubble ── */
+      .reply-quote {
+          background: rgba(0,0,0,0.07);
+          border-left: 3px solid #667eea;
+          border-radius: 6px;
+          padding: 5px 8px;
+          margin-bottom: 5px;
+          font-size: 0.78rem;
+          cursor: pointer;
+          max-width: 100%;
+          overflow: hidden;
+      }
+      .reply-quote .reply-sender {
+          font-weight: 600;
+          color: #667eea;
+          margin-bottom: 2px;
+      }
+      .reply-quote .reply-text {
+          color: #555;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+      .message-bubble.sent .reply-quote {
+          background: rgba(255,255,255,0.25);
+          border-left-color: #fff;
+      }
+      .message-bubble.sent .reply-quote .reply-sender { color: #fff; }
+      .message-bubble.sent .reply-quote .reply-text   { color: rgba(255,255,255,0.85); }
+
+      /* ── Right-click context menu ── */
+      #msgContextMenu {
+          position: fixed;
+          z-index: 9999;
+          background: #fff;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+          padding: 6px 0;
+          min-width: 140px;
+          display: none;
+      }
+      #msgContextMenu .ctx-item {
+          padding: 9px 16px;
+          cursor: pointer;
+          font-size: 0.88rem;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: background 0.15s;
+      }
+      #msgContextMenu .ctx-item:hover { background: #f3f0ff; color: #667eea; }
+
+      /* ── Reply bar above input ── */
+      #replyBar {
+          display: none;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 12px;
+          background: #f3f0ff;
+          border-top: 1px solid #ddd;
+          font-size: 0.82rem;
+      }
+      #replyBar .reply-bar-quote {
+          flex: 1;
+          border-left: 3px solid #667eea;
+          padding-left: 8px;
+          overflow: hidden;
+      }
+      #replyBar .reply-bar-sender { font-weight: 600; color: #667eea; }
+      #replyBar .reply-bar-text   { color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      #replyBar .cancel-reply-btn {
+          background: none; border: none; cursor: pointer;
+          color: #888; font-size: 1.1rem; line-height: 1;
+          padding: 0 4px;
+      }
+      #replyBar .cancel-reply-btn:hover { color: #e53e3e; }
+
+      /* Reply scroll highlight */
+      .message-bubble.highlight-flash {
+          animation: flashHighlight 1.2s ease;
+      }
+      @keyframes flashHighlight {
+          0%   { background: rgba(102, 126, 234, 0.35); }
+          100% { background: inherit; }
+      }
+  </style>
 </head>
 
     <body>
@@ -64,7 +148,7 @@
                               {% if friendship.number_of_messages_sent > 0 %}
                                 <div class="d-flex justify-content-between align-items-center">
                                   <div class="last-msg">{{ message.text_content }}</div>
-                                  {% if not message.is_read %}
+                                  {% if not message.is_read and not message.sender == request.user %}
                                     <span class="unread-badge">
                                         <i class="bi bi-bell-fill"></i>
                                     </span>
@@ -112,7 +196,7 @@
                       <div class="d-flex align-items-center gap-2">
                           <button class="back-btn" id="backBtn"><i class="bi bi-arrow-left"></i></button>
                           <img src="{{ friend.get_profile_image }}" id="chatAvatar" class="contact-avatar" style="width:44px;height:44px">
-                          <div data-bs-target="#userInfoModal" data-bs-toggle="modal"
+                          <div data-bs-target="#userInfoModal" data-bs-toggle="modal" id="chatHeader2"
                            data-joined="{{ friend.date_joined|date:"F jS Y" }}"
                            data-bio="{{ friend.bio|default:'' }}"
                            data-friends-since="{{ friendship.friend_request_accept_at|date:'F jS Y'|default:'Recently' }}">
@@ -134,8 +218,28 @@
                       {% if friendship.number_of_messages_sent > 0 %}
                         {% for message in friendship_messages %}
                           {% if message.sent_by == request.user %}
-                            <div class="message-row">
+                            <div class="message-row" data-message-id="{{ message.id }}"
+                                 data-sender-name="You"
+                                 data-text="{{ message.text_content|default:''|truncatechars:80 }}"
+                                 data-has-image="{% if message.image %}true{% else %}false{% endif %}"
+                                  data-image-url="{% if message.image %}{{ message.image_url }}{% endif %}">
                               <div class="message-bubble sent">
+                                {% with rp=message.reply_to_preview %}
+                                  {% if rp %}
+                                    <div class="reply-quote" data-scroll-to="{{ rp.id }}">
+                                      <div class="reply-sender">{{ rp.sender_name }}</div>
+                                      <div class="reply-text d-flex align-items-center gap-2">
+                                        {% if rp.has_image and rp.image_url %}
+                                          <img src="{{ rp.image_url }}" 
+                                               style="width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0;">
+                                          <span>{{ rp.text|default:"📷 Photo" }}</span>
+                                        {% else %}
+                                          {{ rp.text|default:"(image)" }}
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                {% endwith %}
                                 <div class="message-text">{{ message.text_content }}</div>
                                 {% if message.image %}
                                   <img src="{{ message.image_url }}" class="message-image" onclick="window.open(this.src)" alt="image">
@@ -147,8 +251,27 @@
                               </div>
                             </div>
                           {% else %}
-                            <div class="message-row">
+                            <div class="message-row" data-message-id="{{ message.id }}"
+                                 data-sender-name="{{ message.sent_by.get_full_name|default:message.sent_by.username }}"
+                                 data-text="{{ message.text_content|default:''|truncatechars:80 }}"
+                                 data-has-image="{% if message.image %}true{% else %}false{% endif %}">
                               <div class="message-bubble received">
+                                {% with rp=message.reply_to_preview %}
+                                  {% if rp %}
+                                    <div class="reply-quote" data-scroll-to="{{ rp.id }}">
+                                      <div class="reply-sender">{{ rp.sender_name }}</div>
+                                      <div class="reply-text d-flex align-items-center gap-2">
+                                        {% if rp.has_image and rp.image_url %}
+                                          <img src="{{ rp.image_url }}" 
+                                               style="width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0;">
+                                          <span>{{ rp.text|default:"📷 Photo" }}</span>
+                                        {% else %}
+                                          {{ rp.text|default:"(image)" }}
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                {% endwith %}
                                 <div class="message-sender">{{ message.sent_by.get_full_name|default:message.sent_by.username }}</div>
                                 <div class="message-text">{{ message.text_content }}</div>
                                 {% if message.image %}
@@ -165,8 +288,17 @@
                         <div class="text-center text-muted py-5">Select a conversation from the left</div>
                       {% endif %}
                   </div>
-
-                  <form method="POST" id="messageForm">
+                  <!-- Reply preview bar -->
+                  <div id="replyBar">
+                      <div class="reply-bar-quote">
+                          <div class="reply-bar-sender" id="replyBarSender"></div>
+                          <div class="reply-bar-text"   id="replyBarText"></div>
+                      </div>
+                      <button class="cancel-reply-btn" id="cancelReplyBtn" title="Cancel reply">
+                          <i class="bi bi-x-lg"></i>
+                      </button>
+                  </div>
+                  <form method="POST" id="messageForm" onsubmit="return false;">
                     <div class="input-area">
                         <label for="fileInput" class="attach-btn"><i class="bi bi-paperclip"></i></label>
                         <input type="file" id="fileInput" style="display: none" accept="image/*" />
@@ -244,6 +376,7 @@
                         </div>
                         <input type="file" id="fileInput" style="display: none" accept="image/*" />
                         <input type="hidden" id="friendshipId" value="{{ friendship.id }}">
+                        <input type="hidden" id="replyToIdImage" value="">  <!-- ✅ ADD THIS -->
                     </div>
                     <div class="modal-footer border-0 pt-0 pb-4">
                         <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
@@ -253,6 +386,14 @@
               </div>
           </div>
       </div>
+
+      <!-- Right-click context menu -->
+      <div id="msgContextMenu">
+          <div class="ctx-item" id="ctxReply">
+              <i class="bi bi-reply-fill"></i> Reply
+          </div>
+      </div>
+
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
       <script src="{% static 'js/chat.js' %}"></script>
       <script src="https://unpkg.com/zego-zim-web@2.16.0/index.js"></script>
@@ -311,7 +452,7 @@
               setTimeout(connectMessageWebSocket, 5000);
             };
 
-            function add_message(message) {
+            function _add_message(message) {
               var newChat = null;
               const sentAt = new Date(message.sent_at);
               const displayTime = sentAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -361,24 +502,34 @@
             }
 
             messageSocket.onopen = (event) => {
-              console.log("WebSocket connection opened!");
-              messageForm.addEventListener('submit', (e) => {
+                console.log("WebSocket connection opened!");
+            };
+
+            messageForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                console.log('submitted')
+                e.stopPropagation();
+                const text = messageBox.value.trim();
+                if (!text) return;  // ✅ Don't send empty messages
+                if (messageSocket.readyState !== WebSocket.OPEN) {
+                    console.warn('WebSocket not open, message not sent');
+                    return;
+                }
                 messageSocket.send(
-                  JSON.stringify({
-                    'message': messageBox.value,
-                    'sender_id': '{{ request.user.id }}',
-                    'message_type': 'text'
-                  })
+                    JSON.stringify({
+                        'message': text,
+                        'sender_id': '{{ request.user.id }}',
+                        'message_type': 'text',
+                        'reply_to_id': window.pendingReply ? window.pendingReply.id : null
+                    })
                 );
                 messageForm.reset();
-              });
-            };
+                clearReply();
+            });
 
             messageSocket.onmessage = (event) => {
               const messageData = JSON.parse(event.data)['data'];
-              add_message(messageData);
+              add_message(messageData, '{{ request.user.id }}');  // ✅ use global
+              console.log(messageData);
               scrollToBottom();
             }
 

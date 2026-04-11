@@ -70,6 +70,9 @@
                                 <i class="bi bi-chat-dots-fill me-2"></i>Send Message
                             </a>
                         </div>
+                        <a href="{% url 'delete_friend' friendship.id %}" class="btn btn-danger rounded-pill px-4 py-2">
+                                <i class="bi bi-trash me-2"></i>Remove friend
+                            </a>
                     {% endif %}
                 </div>
 

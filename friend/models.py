@@ -6,7 +6,7 @@ from messaging.models import Message
 class FriendshipStatus(models.TextChoices):
     pending = 'pending', 'Pending'
     accepted = 'accepted', 'Accepted'
-    declined = 'declined', 'Declined'
+    deleted = 'deleted', 'Deleted'
 
 class Friendship(models.Model):
 
@@ -43,7 +43,10 @@ class Friendship(models.Model):
     def last_sent_message(self):
         return Message.objects.filter(friendship=self).order_by('-id').first()
 
-    def get_messages(self):
+    def get_messages(self, user):
         messages = self.messages.all().order_by('sent_at')
-        messages.update(is_read=True)
+        if self.from_user == user:
+            messages.filter(sent_by=self.to_user).update(is_read=True)
+        else:
+            messages.filter(sent_by=self.from_user).update(is_read=True)
         return messages
