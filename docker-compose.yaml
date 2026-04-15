@@ -15,7 +15,7 @@ services:
 
   daphne:
     build: .
-    command: daphne -b 0.0.0.0 -p 8001 ping.asgi:application
+    command: daphne -b 0.0.0.0 -p 8003 ping.asgi:application
     volumes:
       - .:/app
     env_file:
@@ -23,7 +23,7 @@ services:
     depends_on:
       - redis
     ports:
-      - "8001:8001"
+      - "8003:8003"
 
   redis:
     image: redis:7
