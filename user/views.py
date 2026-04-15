@@ -98,7 +98,7 @@ def forgot_password(request):
 
 		reset_url = None
 		if settings.DEPLOYED_ON != 'local':
-			reset_url = f'https://pingg.site{reverse('reset_password', kwargs={'reset_id': password_reset.reset_id})}'
+			reset_url = f"https://pingg.site{reverse('reset_password', kwargs={'reset_id': password_reset.reset_id})}"
 		else:
 			reset_url = request.build_absolute_uri(reverse('reset_password', kwargs={'reset_id': password_reset.reset_id}))
 		
@@ -188,7 +188,7 @@ def profile_setting(request):
 					messages.error(request, 'Password must be at least 6 characters long')
 					return redirect('profile_setting')
 				
-				if new_password != confirm_password:
+				if new_password != confirm_new_password:
 					messages.error(request, 'Passwords do not match')
 					return redirect('profile_setting')
 
