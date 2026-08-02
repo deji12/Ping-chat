@@ -66,9 +66,9 @@ def send_image_message(request, friendship_id):
 	if request.method == 'POST':
 	    image = request.FILES.get('image')
 	    text_message = request.POST.get('text_message')
-	    reply_to_id = request.POST.get('reply_to_id')  # ✅ NEW
+	    reply_to_id = request.POST.get('reply_to_id') 
 
-	    # ✅ NEW: resolve reply
+	    #resolve reply
 	    reply_to = None
 	    if reply_to_id:
 	        try:
@@ -81,7 +81,7 @@ def send_image_message(request, friendship_id):
 	        sent_by=user,
 	        image=image,
 	        text_content=text_message,
-	        reply_to=reply_to,  # ✅ NEW
+	        reply_to=reply_to,  
 	    )
 
 	    # Build reply_preview for broadcast
@@ -108,7 +108,7 @@ def send_image_message(request, friendship_id):
 	                'sent_at': timezone.now().isoformat(),
 	                'recipient_id': f'{friendship.get_friend(user).id}',
 	                'friendship_id': f'{friendship.id}',
-	                'reply_preview': reply_preview,  # ✅ NEW
+	                'reply_preview': reply_preview, 
 	            }
 	        }
 	    )
