@@ -38,13 +38,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	    data = json.loads(text_data)
 	    sender_id = data.get('sender_id')
 	    message_type = data.get('message_type')
-	    reply_to_id = data.get('reply_to_id')  # ✅ NEW
+	    reply_to_id = data.get('reply_to_id')  
 
 	    print(data)
 
 	    if message_type == 'text':
 	        message = data.get('message')
-	        created_msg = await self.create_message(sender_id, message, reply_to_id)  # ✅ pass reply
+	        created_msg = await self.create_message(sender_id, message, reply_to_id)  # pass reply
 	        
 	        # Build reply preview to broadcast
 	        reply_preview = None
@@ -61,7 +61,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	                'sent_at': timezone.now().isoformat(),
 	                'recipient_id': str(self.get_recipient_user_id()),
 	                'friendship_id': f'{self.friendship.id}',
-	                'reply_preview': reply_preview,  # ✅ NEW
+	                'reply_preview': reply_preview, 
 	            }
 	        }
 	        await self.channel_layer.group_send(self.room_name, payload)
