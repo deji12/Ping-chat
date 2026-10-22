@@ -73,7 +73,7 @@ if (userInfoModalEl) {
         }
         
         replyBar.style.display = 'flex';
-        document.getElementById('messageInput')?.focus();
+        document.getElementById('messageInput')?.focus({ preventScroll: true });
     }
 
     window.clearReply = function clearReply() {

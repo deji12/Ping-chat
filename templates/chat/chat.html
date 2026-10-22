@@ -16,7 +16,82 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
     <style>
-      body { padding-top: 0 !important; }
+      /* ── Root Application Layout ── */
+      html, body {
+          height: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          padding-top: 0 !important;
+          overflow: hidden !important;
+          background: #f8fafc;
+          -webkit-tap-highlight-color: transparent;
+      }
+
+      .chat-app {
+          height: 100vh !important;
+          height: 100dvh !important;
+          height: -webkit-fill-available !important;
+          max-height: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+          overflow: hidden !important;
+          position: relative !important;
+          background: #f8fafc;
+          width: 100% !important;
+      }
+
+      .back-bar {
+          flex-shrink: 0 !important;
+      }
+
+      /* Desktop & Global Panels Container */
+      .panels {
+          position: relative !important;
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+          height: 100% !important;
+          display: flex !important;
+          overflow: hidden !important;
+          width: 100% !important;
+      }
+
+      /* Contacts Panel Global */
+      .contacts-panel {
+          display: flex !important;
+          flex-direction: column !important;
+          height: 100% !important;
+          min-height: 0 !important;
+          overflow: hidden !important;
+      }
+
+      /* Chat Panel Global: Critical min-height: 0 and height: 100% */
+      .chat-panel {
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+          height: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+          overflow: hidden !important;
+          position: relative !important;
+          background: #f8fafc;
+      }
+
+      .chat-header {
+          flex-shrink: 0 !important;
+          min-height: 56px;
+          background: #ffffff !important;
+          z-index: 20;
+      }
+
+      /* Messages container: MUST have min-height: 0 to allow flex shrinking and internal scrolling */
+      .messages-container {
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
+          -webkit-overflow-scrolling: touch;
+      }
 
       /* ── Reply quote block inside a bubble ── */
       .reply-quote {
@@ -75,13 +150,17 @@
           display: none;
           align-items: center;
           gap: 8px;
-          padding: 6px 12px;
+          padding: 8px 12px;
           background: #f3f0ff;
-          border-top: 1px solid #ddd;
+          border-top: 1px solid #e2e8f0;
           font-size: 0.82rem;
+          flex-shrink: 0 !important;
+          width: 100%;
+          z-index: 20;
       }
       #replyBar .reply-bar-quote {
           flex: 1;
+          min-width: 0;
           border-left: 3px solid #667eea;
           padding-left: 8px;
           overflow: hidden;
@@ -92,6 +171,7 @@
           background: none; border: none; cursor: pointer;
           color: #888; font-size: 1.1rem; line-height: 1;
           padding: 0 4px;
+          flex-shrink: 0;
       }
       #replyBar .cancel-reply-btn:hover { color: #e53e3e; }
 
@@ -102,6 +182,263 @@
       @keyframes flashHighlight {
           0%   { background: rgba(102, 126, 234, 0.35); }
           100% { background: inherit; }
+      }
+
+      /* ── Input Bar & Form Pinned at Bottom ── */
+      #messageForm {
+          flex-shrink: 0 !important;
+          width: 100% !important;
+          margin: 0 !important;
+          background: #ffffff !important;
+          z-index: 20;
+      }
+
+      .input-area {
+          display: flex !important;
+          align-items: center !important;
+          flex-shrink: 0 !important;
+          width: 100% !important;
+          background: #ffffff !important;
+          border-top: 1px solid #eef2ff !important;
+      }
+
+      /* ══════════════════════════════════════════════════════════════════
+         MOBILE RESPONSIVE ENHANCEMENTS (<= 768px)
+         ══════════════════════════════════════════════════════════════════ */
+      @media (max-width: 768px) {
+          /* 1. Header Bar: Hide minimal back bar when actively viewing a chat room on mobile */
+          .chat-app:has(.panels.show-chat) .back-bar {
+              display: none !important;
+          }
+
+          .back-bar {
+              padding: 0.5rem 1rem !important;
+              font-size: 0.88rem;
+          }
+
+          /* 2. Panels container and slide animations */
+          .contacts-panel {
+              width: 100% !important;
+              position: absolute !important;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              right: 0;
+              height: 100% !important;
+              z-index: 5;
+              transform: translateX(0);
+              transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease;
+              background: #ffffff;
+          }
+
+          .chat-panel {
+              width: 100% !important;
+              position: absolute !important;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              right: 0;
+              height: 100% !important;
+              z-index: 10;
+              transform: translateX(100%);
+              transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease;
+              background: #f8fafc;
+          }
+
+          .panels.show-chat .contacts-panel {
+              transform: translateX(-20%) !important;
+              opacity: 0.35;
+              pointer-events: none;
+          }
+
+          .panels.show-chat .chat-panel {
+              transform: translateX(0) !important;
+              opacity: 1;
+              pointer-events: auto;
+              box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
+          }
+
+          /* 3. Chat Header refinement */
+          .chat-header {
+              padding: 0.55rem 0.85rem !important;
+              gap: 8px !important;
+              min-height: 54px;
+              position: sticky;
+              top: 0;
+          }
+
+          .chat-header .back-btn {
+              display: flex !important;
+              align-items: center;
+              justify-content: center;
+              width: 36px !important;
+              height: 36px !important;
+              font-size: 1.3rem !important;
+              margin-left: -4px;
+              color: #667eea;
+              flex-shrink: 0;
+              border-radius: 50%;
+              background: transparent;
+          }
+
+          .chat-header .contact-avatar {
+              width: 38px !important;
+              height: 38px !important;
+              margin-right: 0 !important;
+              flex-shrink: 0;
+          }
+
+          .chat-header > .d-flex:first-child {
+              min-width: 0;
+              flex: 1;
+              overflow: hidden;
+          }
+
+          #chatHeader2 {
+              min-width: 0;
+              flex: 1;
+              overflow: hidden;
+              cursor: pointer;
+          }
+
+          #chatName {
+              font-size: 0.94rem !important;
+              line-height: 1.25;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+          }
+
+          #chatStatus {
+              font-size: 0.72rem !important;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: block;
+          }
+
+          #videoCallBtn {
+              width: 36px !important;
+              height: 36px !important;
+              flex-shrink: 0;
+          }
+
+          /* 4. Messages Container & Bubble Proportions */
+          .messages-container {
+              padding: 0.75rem 0.65rem !important;
+              gap: 8px !important;
+          }
+
+          .message-row {
+              display: flex;
+              width: 100%;
+          }
+
+          .message-bubble {
+              max-width: 86% !important;
+              padding: 0.55rem 0.85rem !important;
+              border-radius: 18px !important;
+              box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          }
+
+          .received {
+              border-bottom-left-radius: 4px !important;
+          }
+
+          .sent {
+              border-bottom-right-radius: 4px !important;
+          }
+
+          .message-text {
+              font-size: 0.9rem !important;
+              line-height: 1.45;
+              word-break: break-word;
+              overflow-wrap: break-word;
+          }
+
+          .message-image {
+              max-width: 100% !important;
+              max-height: 240px !important;
+              width: auto;
+              height: auto;
+              border-radius: 12px;
+              object-fit: cover;
+          }
+
+          .message-meta {
+              font-size: 0.65rem !important;
+              margin-top: 3px;
+              white-space: nowrap;
+          }
+
+          /* 5. Input Area & Safe Area Inset */
+          .input-area {
+              padding: 0.5rem 0.75rem !important;
+              padding-bottom: max(0.5rem, env(safe-area-inset-bottom)) !important;
+              gap: 8px !important;
+          }
+
+          .input-area input {
+              font-size: 16px !important; /* Critical to prevent iOS Safari auto-zoom */
+              padding: 0.55rem 0.9rem !important;
+              border-radius: 20px !important;
+              min-height: 40px;
+          }
+
+          .attach-btn,
+          .send-btn {
+              width: 38px !important;
+              height: 38px !important;
+              min-width: 38px;
+              min-height: 38px;
+              flex-shrink: 0 !important;
+          }
+
+          /* 6. Contacts Panel & Search list */
+          .panel-header {
+              padding: 0.75rem 1rem !important;
+              min-height: 56px;
+          }
+
+          .search-wrapper {
+              margin: 8px 12px !important;
+              padding: 6px 14px !important;
+          }
+
+          .search-wrapper input {
+              font-size: 16px !important;
+          }
+
+          .contact-item {
+              padding: 0.75rem 1rem !important;
+          }
+
+          .contact-avatar {
+              width: 44px !important;
+              height: 44px !important;
+          }
+
+          .contact-name {
+              font-size: 0.92rem;
+          }
+
+          .last-msg {
+              font-size: 0.78rem;
+          }
+
+          /* 7. Modals */
+          .modal-dialog {
+              margin: 0.75rem !important;
+              max-width: calc(100% - 1.5rem) !important;
+          }
+
+          #imagePreviewModal img#previewImage {
+              max-height: 45vh !important;
+          }
+
+          #captionInput {
+              font-size: 16px !important;
+          }
       }
   </style>
 </head>
@@ -115,7 +452,7 @@
               </a>
           </div>
 
-          <div class="panels" id="panels">
+          <div class="panels{% if friend %} show-chat{% endif %}" id="panels">
               <!-- LEFT: FRIENDS LIST -->
               <div class="contacts-panel">
                   <div class="panel-header">
@@ -366,7 +703,7 @@
                       <h5 class="modal-title fw-bold">Preview</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                   </div>
-                  <form method="POST" id="messageForm">
+                  <form method="POST" id="imagePreviewForm">
                     {% csrf_token %}
                     <div class="modal-body p-4 text-center">
                         <img id="previewImage" src="" alt="Image preview" class="img-fluid rounded-3" style="max-height: 60vh; object-fit: contain;">
