@@ -64,24 +64,25 @@ def send_image_message(request, friendship_id):
 		return redirect(request.META.get('HTTP_REFERER', '/'))
 
 	if request.method == 'POST':
-		image = request.FILES.get('image')
-		text_message = request.POST.get('text_message')
-		reply_to_id = request.POST.get('reply_to_id') 
+	    image = request.FILES.get('image')
+	    text_message = request.POST.get('text_message')
+	    reply_to_id = request.POST.get('reply_to_id') 
 
-		reply_to = None
-		if reply_to_id:
-			try:
-				reply_to = Message.objects.get(id=reply_to_id)
-			except Message.DoesNotExist:
-				pass
+	    #resolve reply
+	    reply_to = None
+	    if reply_to_id:
+	        try:
+	            reply_to = Message.objects.get(id=reply_to_id)
+	        except Message.DoesNotExist:
+	            pass
 
-		message = Message.objects.create(
-			friendship=friendship,
-			sent_by=user,
-			image=image,
-			text_content=text_message,
-			reply_to=reply_to, 
-		)
+	    message = Message.objects.create(
+	        friendship=friendship,
+	        sent_by=user,
+	        image=image,
+	        text_content=text_message,
+	        reply_to=reply_to,  
+	    )
 
 		# Build reply_preview for broadcast
 		reply_preview = None
@@ -96,21 +97,21 @@ def send_image_message(request, friendship_id):
 
 		channel_layer = get_channel_layer()
 		async_to_sync(channel_layer.group_send)(
-			f'room_{friendship_id}',
-			{
-				'type': 'send_message',
-				'data': {
-					'message_type': 'image_text',
-					'sender_id': f'{user.id}',
-					'message': text_message or '',
-					'image_url': message.image_url(),
-					'sent_at': timezone.now().isoformat(),
-					'recipient_id': f'{friendship.get_friend(user).id}',
-					'friendship_id': f'{friendship.id}',
-					'reply_preview': reply_preview,
-				}
-			}
-		)
-		return JsonResponse({'status': 'ok'}, status=200)
+	        f'room_{friendship_id}',
+	        {
+	            'type': 'send_message',
+	            'data': {
+	                'message_type': 'image_text',
+	                'sender_id': f'{user.id}',
+	                'message': text_message or '',
+	                'image_url': message.image_url(),
+	                'sent_at': timezone.now().isoformat(),
+	                'recipient_id': f'{friendship.get_friend(user).id}',
+	                'friendship_id': f'{friendship.id}',
+	                'reply_preview': reply_preview, 
+	            }
+	        }
+	    )
+	    return JsonResponse({'status': 'ok'}, status=200)
 
 	return JsonResponse({'error': 'Method not allowed'}, status=405)
