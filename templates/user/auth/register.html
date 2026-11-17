@@ -2,12 +2,12 @@
 {% block content %}
   
   <div class="d-flex align-items-center gap-3 mb-4">
-    <div class="bg-primary bg-opacity-10 p-2 rounded-3">
-      <i class="bi bi-person-plus-fill fs-4" style="color: #667eea;"></i>
+    <div class="p-2 rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: rgba(94, 106, 210, 0.12); border: 1px solid rgba(94, 106, 210, 0.3); color: #5E6AD2;">
+      <i class="bi bi-person-plus-fill fs-4"></i>
     </div>
     <div>
-      <h2 class="h4 mb-0 fw-semibold" style="color: #1e293b;">Create account</h2>
-      <p class="text-muted small mb-0">join the ping community</p>
+      <h2 class="h4 mb-0 fw-semibold" style="color: var(--foreground); letter-spacing: -0.02em;">Create account</h2>
+      <p class="small mb-0" style="color: var(--foreground-muted);">Join the ping community</p>
     </div>
   </div>
 
@@ -16,44 +16,44 @@
     {% csrf_token %}
     <div class="row g-3 mb-3">
       <div class="col-12 col-sm-6">
-        <label class="form-label"><i class="bi bi-person"></i> First name</label>
-        <input type="text" class="form-control" id="firstName" name="first_name" placeholder="e.g., Alex" required value="{{request.GET.first_name|default:''}}">
+        <label class="form-label"><i class="bi bi-person me-1"></i> First name</label>
+        <input type="text" class="form-control" id="firstName" name="first_name" placeholder="e.g. Alex" required value="{{request.GET.first_name|default:''}}">
       </div>
       <div class="col-12 col-sm-6">
-        <label class="form-label"><i class="bi bi-person-badge"></i> Last name</label>
-        <input type="text" class="form-control" id="lastName" name="last_name" placeholder="e.g., Morgan" required value="{{request.GET.last_name|default:''}}">
+        <label class="form-label"><i class="bi bi-person-badge me-1"></i> Last name</label>
+        <input type="text" class="form-control" id="lastName" name="last_name" placeholder="e.g. Morgan" required value="{{request.GET.last_name|default:''}}">
       </div>
     </div>
 
     <div class="mb-3">
-      <label class="form-label"><i class="bi bi-at"></i> Username</label>
-      <input type="text" class="form-control" id="username" name="username" placeholder="@username" required value="{{request.GET.username|default:''}}"
+      <label class="form-label"><i class="bi bi-at me-1"></i> Username</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="@username" required value="{{request.GET.username|default:''}}">
     </div>
 
     <div class="mb-3">
-      <label class="form-label"><i class="bi bi-envelope-fill"></i> Email address</label>
+      <label class="form-label"><i class="bi bi-envelope-fill me-1"></i> Email address</label>
       <input type="email" class="form-control" id="email" name="email" placeholder="hello@ping.com" required value="{{request.GET.email|default:''}}">
     </div>
 
     <div class="mb-3">
-      <label class="form-label"><i class="bi bi-lock-fill"></i> Password</label>
+      <label class="form-label"><i class="bi bi-lock-fill me-1"></i> Password</label>
       <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" minlength="6" required>
-      <div class="form-text text-muted">at least 6 characters</div>
+      <div class="form-text small" style="color: var(--foreground-muted);">At least 6 characters</div>
     </div>
 
     <div class="mb-4">
-      <label class="form-label"><i class="bi bi-shield-check"></i> Confirm password</label>
-      <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="confirm password" required>
+      <label class="form-label"><i class="bi bi-shield-check me-1"></i> Confirm password</label>
+      <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Confirm password" required>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm" id="registerBtn">
+    <button type="submit" class="btn btn-primary w-100 py-2" id="registerBtn">
       <i class="bi bi-person-plus me-2"></i> Create account
     </button>
 
     <div class="text-center mt-4 pt-2">
-      <p class="mb-0 text-muted small">
+      <p class="mb-0 small" style="color: var(--foreground-muted);">
         Already have an account? 
-        <a href="{% url 'login_user' %}" id="loginRedirectLink" class="fw-semibold" style="color: #667eea;">Sign in →</a>
+        <a href="{% url 'login_user' %}" id="loginRedirectLink" class="fw-semibold ms-1" style="color: var(--accent);">Sign in →</a>
       </p>
     </div>
   </form>

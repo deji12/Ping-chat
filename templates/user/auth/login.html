@@ -1,12 +1,12 @@
 {% extends 'user/auth/base.html' %}
 {% block content %}
   <div class="d-flex align-items-center gap-3 mb-4">
-    <div class="bg-primary bg-opacity-10 p-2 rounded-3">
-      <i class="bi bi-box-arrow-in-right fs-4" style="color: #667eea;"></i>
+    <div class="p-2 rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: rgba(94, 106, 210, 0.12); border: 1px solid rgba(94, 106, 210, 0.3); color: #5E6AD2;">
+      <i class="bi bi-box-arrow-in-right fs-4"></i>
     </div>
     <div>
-      <h2 class="h4 mb-0 fw-semibold" style="color: #1e293b;">Welcome back</h2>
-      <p class="text-muted small mb-0">sign in to continue</p>
+      <h2 class="h4 mb-0 fw-semibold" style="color: var(--foreground); letter-spacing: -0.02em;">Welcome back</h2>
+      <p class="small mb-0" style="color: var(--foreground-muted);">Sign in to continue</p>
     </div>
   </div>
 
@@ -14,34 +14,34 @@
   <form method="POST">
     {% csrf_token %}
     <div class="mb-3 mt-3">
-      <label class="form-label"><i class="bi bi-person-circle"></i> Username</label>
-      <input type="text" class="form-control w-100" name="username" id="loginIdentifier" placeholder="e.g johndoe" required>
+      <label class="form-label"><i class="bi bi-person-circle me-1"></i> Username</label>
+      <input type="text" class="form-control w-100" name="username" id="loginIdentifier" placeholder="e.g. johndoe" required>
     </div>
 
     <div class="mb-3">
-      <label class="form-label"><i class="bi bi-key-fill"></i> Password</label>
+      <label class="form-label"><i class="bi bi-key-fill me-1"></i> Password</label>
       <input type="password" class="form-control" name="password" id="loginPassword" placeholder="••••••••" required>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
       <div class="form-check">
         <input class="form-check-input" type="checkbox" id="rememberMe">
-        <label class="form-check-label small text-secondary" for="rememberMe">
+        <label class="form-check-label small" for="rememberMe" style="color: var(--foreground-muted);">
           Remember me
         </label>
       </div>
-      <a href="{% url 'forgot_password' %}" id="forgotPasswordLink" class="small fw-semibold">Forgot password?</a>
+      <a href="{% url 'forgot_password' %}" id="forgotPasswordLink" class="small fw-semibold" style="color: var(--accent);">Forgot password?</a>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">
+    <button type="submit" class="btn btn-primary w-100 py-2">
       <i class="bi bi-box-arrow-in-right me-2"></i> Sign in
     </button>
 
     <div class="text-center mt-4 pt-2">
-      <p class="mb-0 text-muted small">
+      <p class="mb-0 small" style="color: var(--foreground-muted);">
         Don't have an account? 
-        <a href="{% url 'register_user' %}" id="registerRedirectLink" class="fw-semibold">Create one →</a>
+        <a href="{% url 'register_user' %}" id="registerRedirectLink" class="fw-semibold ms-1" style="color: var(--accent);">Create one →</a>
       </p>
     </div>
-  </div>
+  </form>
 {% endblock content %}

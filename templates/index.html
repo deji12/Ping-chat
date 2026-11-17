@@ -1,216 +1,220 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}ping – real‑time chat, simplified{% endblock %}
+{% block title %}ping · real‑time chat, engineered for clarity{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section py-5">
-    <div class="container py-4">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-5 mb-lg-0">
-                <div class="overline-label">Real‑time chat</div>
-                <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -0.02em;">
-                    Chat that <span class="gradient-text">feels like home</span>
-                </h1>
-                <p class="lead text-secondary mb-4">
-                    ping is a modern, real‑time messaging platform. Connect with friends, share images, and never miss a beat – all in a beautifully simple space.
-                </p>
-                <div class="d-flex flex-wrap gap-3">
-                    {% if not request.user.is_authenticated %}
-                        <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
-                            <i class="bi bi-person-plus me-2"></i>Get started – it's free
+<section class="hero-section py-4 py-lg-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(94, 106, 210, 0.1); border: 1px solid rgba(94, 106, 210, 0.3); font-size: 0.75rem; font-family: monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">
+                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent);"></span>
+                Next‑Gen Messaging
+            </div>
+            
+            <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -0.03em; line-height: 1.15; color: var(--foreground);">
+                Chat that <span style="background: linear-gradient(135deg, #5E6AD2 0%, #A5B4FC 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">feels like home</span>
+            </h1>
+            
+            <p class="lead mb-4" style="color: var(--foreground-muted); max-width: 520px; font-size: 1.1rem; line-height: 1.6;">
+                Ping is a precision, real‑time messaging platform designed for speed, fluidity, and absolute clarity. Connect with friends, share rich media, and make crystal‑clear calls without distractions.
+            </p>
+            
+            <div class="d-flex flex-wrap gap-3">
+                {% if not request.user.is_authenticated %}
+                    <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg px-4 py-3">
+                        <i class="bi bi-person-plus me-2"></i>Get started – it's free
+                    </a>
+                {% else %}
+                    {% if request.user.number_of_friends > 0 %}
+                        <a href="{% url 'chat' %}" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-chat-dots-fill me-2"></i>Continue chatting
                         </a>
                     {% else %}
-                        {% if request.user.number_of_friends > 0 %}
-                            <a href="{% url 'chat' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
-                                <i class="bi bi-person-plus me-2"></i>Continue chatting
-                            </a>
-                        {% else %}
-                            <a href="{% url 'search_users' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
-                                    <i class="bi bi-person-plus me-2"></i>Find friends
-                            </a>
-                        {% endif %}
+                        <a href="{% url 'search_users' %}" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-person-plus me-2"></i>Find friends
+                        </a>
                     {% endif %}
-                    <a href="#features" class="btn btn-outline-custom btn-lg rounded-pill px-5 py-3">
-                        <i class="bi bi-arrow-down me-2"></i>Explore features
-                    </a>
-                </div>
-                <div class="mt-4 d-flex gap-3 small text-muted">
-                    <span><i class="bi bi-shield-check"></i> No spam</span>
-                    <span><i class="bi bi-lock"></i> Encrypted</span>
-                    <span><i class="bi bi-github"></i> Open source</span>
-                </div>
+                {% endif %}
+                <a href="#features" class="btn btn-secondary btn-lg px-4 py-3">
+                    <i class="bi bi-arrow-down me-2"></i>Explore features
+                </a>
             </div>
-            <div class="col-lg-6 text-center">
-                <!-- Chat mockup (real UI) -->
-                <div class="chat-mockup mx-auto">
-                    <div class="chat-mockup-header">
-                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                            <span class="fw-medium" style="font-size: 12px;">JD</span>
+            
+            <div class="mt-4 pt-2 d-flex flex-wrap gap-4 small" style="color: var(--foreground-muted);">
+                <span><i class="bi bi-shield-check me-1" style="color: var(--accent);"></i> No spam</span>
+                <span><i class="bi bi-lock me-1" style="color: var(--accent);"></i> Encrypted</span>
+                <span><i class="bi bi-lightning-charge me-1" style="color: var(--accent);"></i> Instant Delivery</span>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <!-- Chat mockup (Linear UI) -->
+            <div class="chat-mockup mx-auto">
+                <div class="chat-mockup-header d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(94, 106, 210, 0.2); border: 1px solid rgba(94, 106, 210, 0.4); color: #EDEDEF;">
+                            <span class="fw-semibold" style="font-size: 13px;">JD</span>
                         </div>
                         <div>
-                            <div class="fw-medium">Jane Doe</div>
-                            <div class="small text-muted"><span class="online-dot"></span> Active now</div>
+                            <div class="fw-semibold text-start" style="color: var(--foreground); font-size: 0.95rem;">Jane Doe</div>
+                            <div class="small d-flex align-items-center gap-1" style="color: #34d399; font-size: 0.78rem;">
+                                <span class="online-dot"></span> Active now
+                            </div>
                         </div>
                     </div>
-                    <div class="chat-mockup-messages">
-                        <div class="message-bubble received">
-                            <div class="bubble received">Hey! Are you free to chat?</div>
-                        </div>
-                        <div class="message-bubble sent" style="background: none;">
-                            <div class="bubble sent">Absolutely! What's up?</div>
-                        </div>
-                        <div class="message-bubble received">
-                            <div class="bubble received">Check out this new feature – image previews</div>
-                        </div>
-                        <div class="typing-indicator">
-                            <span></span><span></span><span></span>
-                            <span class="ms-2 small text-muted">Typing...</span>
-                        </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="p-2 rounded-3" style="background: var(--surface); color: var(--foreground-muted);"><i class="bi bi-camera-video"></i></span>
+                        <span class="p-2 rounded-3" style="background: var(--surface); color: var(--foreground-muted);"><i class="bi bi-three-dots"></i></span>
                     </div>
-                    <div class="input-mock">
-                        <input type="text" placeholder="Type a message..." value="Looks great!">
-                        <button><i class="bi bi-send"></i></button>
+                </div>
+                
+                <div class="chat-mockup-messages">
+                    <div class="message-bubble received">
+                        <div class="bubble received">Hey! Have you tried the new Linear update?</div>
+                        <span class="bubble-meta">10:42 AM</span>
                     </div>
+                    <div class="message-bubble sent">
+                        <div class="bubble sent">Yes! The dark ambient lighting and speed are incredible.</div>
+                        <span class="bubble-meta">10:43 AM · <i class="bi bi-check2-all"></i></span>
+                    </div>
+                    <div class="message-bubble received">
+                        <div class="bubble received">Check out image previews and reply quoting — super responsive.</div>
+                        <span class="bubble-meta">10:43 AM</span>
+                    </div>
+                    <div class="typing-indicator mt-2">
+                        <span></span><span></span><span></span>
+                        <span class="ms-2 small" style="color: var(--foreground-muted); font-size: 0.75rem;">Jane is typing...</span>
+                    </div>
+                </div>
+                
+                <div class="input-mock">
+                    <input type="text" placeholder="Type a message..." value="It feels like a native desktop app!" readonly>
+                    <button type="button"><i class="bi bi-send-fill"></i></button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Features Section -->
-<section id="features" class="py-5 bg-white border-top border-bottom">
-    <div class="container py-4">
-        <div class="text-center mb-5">
-            <div class="overline-label">Why ping</div>
-            <h2 class="section-title fw-bold">Everything you need for <span class="gradient-text">real connection</span></h2>
-            <p class="section-subtitle text-secondary mx-auto" style="max-width: 600px;">
-                Designed to be fast, intuitive, and a joy to use – whether you're catching up with friends or collaborating.
-            </p>
+<!-- Features Section (Bento Grid) -->
+<section id="features" class="py-5 my-4">
+    <div class="text-center mb-5">
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(94, 106, 210, 0.1); border: 1px solid rgba(94, 106, 210, 0.3); font-size: 0.75rem; font-family: monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">
+            Engineered For Speed
         </div>
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-chat-dots-fill fs-2" style="color: #667eea;"></i>
-                    </div>
-                    <h5 class="fw-semibold">Real‑time messaging</h5>
-                    <p class="text-secondary small">WebSocket‑powered instant delivery with typing indicators and read receipts.</p>
+        <h2 class="display-6 fw-bold mb-3" style="letter-spacing: -0.02em; color: var(--foreground);">
+            Everything you need for <span style="background: linear-gradient(135deg, #5E6AD2 0%, #A5B4FC 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">real connection</span>
+        </h2>
+        <p class="mx-auto" style="max-width: 600px; color: var(--foreground-muted);">
+            Obsessively crafted to feel instant, fluid, and delightful — whether you're catching up with friends or collaborating.
+        </p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="bento-card p-4 h-100">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-chat-dots-fill fs-3"></i>
                 </div>
+                <h5 class="fw-semibold mb-2" style="color: var(--foreground);">Real‑time messaging</h5>
+                <p class="small mb-0" style="color: var(--foreground-muted); line-height: 1.6;">
+                    WebSocket-powered instant delivery with smooth typing indicators, read receipts, and quote replies.
+                </p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-image-fill fs-2" style="color: #667eea;"></i>
-                    </div>
-                    <h5 class="fw-semibold">Rich media sharing</h5>
-                    <p class="text-secondary small">Send images with captions – preview before sending, just like WhatsApp.</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="bento-card p-4 h-100">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-image-fill fs-3"></i>
                 </div>
+                <h5 class="fw-semibold mb-2" style="color: var(--foreground);">Rich media sharing</h5>
+                <p class="small mb-0" style="color: var(--foreground-muted); line-height: 1.6;">
+                    Send images with captions and responsive preview dialogs before sending, keeping conversations vivid.
+                </p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-people-fill fs-2" style="color: #667eea;"></i>
-                    </div>
-                    <h5 class="fw-semibold">Friend network</h5>
-                    <p class="text-secondary small">Add friends, accept requests, and see mutual connections – grow your circle.</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="bento-card p-4 h-100">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-camera-video-fill fs-3"></i>
                 </div>
+                <h5 class="fw-semibold mb-2" style="color: var(--foreground);">Zego video calls</h5>
+                <p class="small mb-0" style="color: var(--foreground-muted); line-height: 1.6;">
+                    High-definition 1-on-1 audio and video calls directly inside your browser window with one click.
+                </p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-bell-fill fs-2" style="color: #667eea;"></i>
-                    </div>
-                    <h5 class="fw-semibold">Smart notifications</h5>
-                    <p class="text-secondary small">Unread badges keep you in the loop – never miss an important message.</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="bento-card p-4 h-100">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-people-fill fs-3"></i>
                 </div>
+                <h5 class="fw-semibold mb-2" style="color: var(--foreground);">Friend network</h5>
+                <p class="small mb-0" style="color: var(--foreground-muted); line-height: 1.6;">
+                    Search people by username, manage incoming requests, and maintain clean mutual friendship channels.
+                </p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-person-circle fs-2" style="color: #667eea;"></i>
-                    </div>
-                    <h5 class="fw-semibold">Custom profile</h5>
-                    <p class="text-secondary small">Upload a profile picture, write a bio, and make your presence unique.</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="bento-card p-4 h-100">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-person-badge-fill fs-3"></i>
                 </div>
+                <h5 class="fw-semibold mb-2" style="color: var(--foreground);">Custom profile & avatar</h5>
+                <p class="small mb-0" style="color: var(--foreground-muted); line-height: 1.6;">
+                    Personalize your presence with customized profile pictures, bio details, and account preferences.
+                </p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card text-center p-4 rounded-4 h-100 shadow-sm border">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3 mb-3">
-                        <i class="bi bi-shield-lock-fill fs-2" style="color: #667eea;"></i>
-                    </div>
-                    <h5 class="fw-semibold">Privacy first</h5>
-                    <p class="text-secondary small">Your data stays yours. Secure authentication and optional message encryption.</p>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="bento-card p-4 h-100">
+                <div class="feature-icon mb-3">
+                    <i class="bi bi-shield-lock-fill fs-3"></i>
                 </div>
+                <h5 class="fw-semibold mb-2" style="color: var(--foreground);">Privacy & security</h5>
+                <p class="small mb-0" style="color: var(--foreground-muted); line-height: 1.6;">
+                    Your data stays yours. Secure session authentication, CSRF protection, and privacy-first architecture.
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Chat Demo Section (second mockup) -->
-<section id="chat" class="py-5">
-    <div class="container py-4">
-        <div class="text-center mb-5">
-            <div class="overline-label">Experience it live</div>
-            <h2 class="section-title fw-bold">Real conversations, <span class="gradient-text">zero clutter</span></h2>
-            <p class="section-subtitle text-secondary mx-auto">No fake screenshots – this is exactly how ping works.</p>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="chat-mockup mx-auto">
-                    <div class="chat-mockup-header">
-                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                            <span class="fw-medium" style="font-size: 12px;">MK</span>
-                        </div>
-                        <div>
-                            <div class="fw-medium">Marcus Lee</div>
-                            <div class="small text-muted"><span class="online-dot"></span> Online</div>
-                        </div>
-                    </div>
-                    <div class="chat-mockup-messages">
-                        <div class="message-bubble received">
-                            <div class="bubble received">Hey, have you seen the new design?</div>
-                        </div>
-                        <div class="message-bubble sent" style="background: none;">
-                            <div class="bubble sent">Yes! It's so clean – no gradients, just pure content.</div>
-                        </div>
-                        <div class="message-bubble received">
-                            <div class="bubble received">Love the flat style. Feels modern.</div>
-                        </div>
-                        <div class="message-bubble sent" style="background: none;">
-                            <div class="bubble sent">Exactly. Let's share this with the team.</div>
-                        </div>
-                    </div>
-                    <div class="input-mock">
-                        <input type="text" placeholder="Type a message...">
-                        <button><i class="bi bi-send"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Call to Action -->
-<section class="py-5 bg-light border-top">
-    <div class="container py-4 text-center">
+<!-- Call to Action Banner -->
+<section class="py-5 my-4">
+    <div class="cta-banner p-4 p-md-5 text-center">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="overline-label">Join the community</div>
-                <h2 class="section-title fw-bold">Ready to start chatting?</h2>
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(94, 106, 210, 0.15); border: 1px solid rgba(94, 106, 210, 0.35); font-size: 0.75rem; font-family: monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">
+                    Join The Community
+                </div>
+                <h2 class="display-6 fw-bold mb-3" style="color: var(--foreground); letter-spacing: -0.02em;">Ready to experience modern chat?</h2>
+                
                 {% if not request.user.is_authenticated %}
-                    <p class="section-subtitle text-secondary mb-4">Sign up in seconds – no credit card required.</p>
-                    <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
+                    <p class="mb-4" style="color: var(--foreground-muted); font-size: 1.05rem;">
+                        Sign up in seconds — clean, fast, and engineered like modern developer tools.
+                    </p>
+                    <a href="{% url 'register_user' %}" class="btn btn-primary btn-lg px-5 py-3">
                         <i class="bi bi-person-plus me-2"></i>Create your free account
                     </a>
-                    <p class="mt-3 small text-muted">Already have an account? <a href="{% url 'login_user' %}" class="fw-semibold text-decoration-none">Sign in →</a></p>
+                    <p class="mt-3 small" style="color: var(--foreground-muted);">
+                        Already have an account? 
+                        <a href="{% url 'login_user' %}" class="fw-semibold ms-1" style="color: var(--accent);">Sign in →</a>
+                    </p>
                 {% else %}
-                    <p class="section-subtitle text-secondary mb-4">Continue where you left off with friends</p>
-                    <a href="{% url 'chat' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
-                        <i class="bi bi-person-plus me-2"></i>Continue chatting
+                    <p class="mb-4" style="color: var(--foreground-muted); font-size: 1.05rem;">
+                        Pick up right where you left off with your friends and teammates.
+                    </p>
+                    <a href="{% url 'chat' %}" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="bi bi-chat-dots-fill me-2"></i>Open Conversations
                     </a>
-                    <p class="mt-3 small text-muted">Looking for friends? <a href="{% url 'search_users' %}" class="fw-semibold text-decoration-none">Search →</a></p>
                 {% endif %}
             </div>
         </div>
@@ -218,163 +222,167 @@
 </section>
 
 <style>
-    /* Additional overrides for the flat/minimal style while keeping the original design system */
-    .overline-label {
-        font-size: 12px;
-        font-weight: 500;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: #667eea;
-        margin-bottom: 0.5rem;
-    }
-    .section-title {
-        font-size: 28px;
-        letter-spacing: -0.01em;
-    }
-    .section-subtitle {
-        font-size: 16px;
-        color: #64748b;
-    }
-    .feature-card {
-        transition: all 0.2s ease;
-        background: white;
-    }
-    .feature-card:hover {
-        transform: translateY(-4px);
-        border-color: #c7d2fe;
-        background: #fafafe;
-    }
-    .feature-icon {
-        transition: all 0.2s;
-    }
-    .feature-card:hover .feature-icon {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
-    }
-    .feature-card:hover .feature-icon i {
-        color: white !important;
-    }
-    .btn-outline-custom {
-        border: 2px solid #667eea;
-        color: #667eea;
-        background: transparent;
-        border-radius: 50px;
-        transition: all 0.2s;
-    }
-    .btn-outline-custom:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-color: transparent;
-        color: white;
-        transform: translateY(-2px);
-    }
-    /* Chat mockup styles (match the minimal UI) */
+    /* ── Linear / Modern Mockup and Bento Card Styles ── */
     .chat-mockup {
-        background: white;
-        border: 1px solid #eef2ff;
-        border-radius: 20px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-default);
+        border-radius: var(--radius-xl);
         overflow: hidden;
         max-width: 480px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 24px 50px rgba(0, 0, 0, 0.75), 0 0 60px rgba(94, 106, 210, 0.15);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
     }
     .chat-mockup-header {
-        padding: 12px 16px;
-        border-bottom: 1px solid #eef2ff;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border-default);
+        background: rgba(255, 255, 255, 0.02);
     }
     .chat-mockup-messages {
-        padding: 16px;
-        min-height: 280px;
-        background: #fefefe;
+        padding: 20px 18px;
+        min-height: 290px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: var(--bg-base);
     }
     .message-bubble {
-        max-width: 80%;
-        margin-bottom: 12px;
+        max-width: 82%;
         display: flex;
         flex-direction: column;
     }
     .message-bubble.sent {
+        align-self: flex-end;
         align-items: flex-end;
     }
+    .message-bubble.received {
+        align-self: flex-start;
+        align-items: flex-start;
+    }
     .bubble {
-        padding: 8px 12px;
-        border-radius: 18px;
-        font-size: 14px;
-        line-height: 1.4;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 0.88rem;
+        line-height: 1.45;
     }
     .bubble.sent {
-        background: #667eea;
-        color: white;
-        border-bottom-right-radius: 4px;
+        background: var(--accent);
+        color: #ffffff;
+        border-bottom-right-radius: 3px;
+        box-shadow: 0 4px 14px rgba(94, 106, 210, 0.35);
     }
     .bubble.received {
-        background: #f1f5f9;
-        color: #1e293b;
-        border-bottom-left-radius: 4px;
+        background: var(--surface);
+        border: 1px solid var(--border-default);
+        color: var(--foreground);
+        border-bottom-left-radius: 3px;
     }
-    .typing-indicator {
-        display: flex;
-        gap: 4px;
-        padding: 8px 12px;
-        background: #f1f5f9;
-        border-radius: 18px;
-        width: fit-content;
-    }
-    .typing-indicator span {
-        width: 6px;
-        height: 6px;
-        background: #94a3b8;
-        border-radius: 50%;
-        animation: blink 1.4s infinite;
-    }
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink {
-        0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-        30% { opacity: 1; transform: translateY(-2px); }
+    .bubble-meta {
+        font-size: 0.68rem;
+        color: var(--foreground-muted);
+        margin-top: 4px;
     }
     .online-dot {
         width: 8px;
         height: 8px;
-        background: #22c55e;
+        background: #10b981;
         border-radius: 50%;
         display: inline-block;
-        margin-right: 4px;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+    .typing-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 12px;
+        background: var(--surface);
+        border: 1px solid var(--border-default);
+        border-radius: 12px;
+        width: fit-content;
+    }
+    .typing-indicator span:not(.small) {
+        width: 5px;
+        height: 5px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: typingBlink 1.4s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBlink {
+        0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+        30% { opacity: 1; transform: translateY(-2px); }
     }
     .input-mock {
-        border-top: 1px solid #eef2ff;
+        border-top: 1px solid var(--border-default);
         padding: 12px 16px;
         display: flex;
         gap: 8px;
+        background: var(--bg-elevated);
     }
     .input-mock input {
         flex: 1;
-        border: 1px solid #eef2ff;
-        border-radius: 24px;
-        padding: 8px 14px;
-        font-size: 14px;
-        background: white;
+        border: 1px solid var(--border-default);
+        border-radius: 10px;
+        padding: 9px 14px;
+        font-size: 0.85rem;
+        background: var(--bg-base);
+        color: var(--foreground);
         outline: none;
     }
     .input-mock button {
-        background: #eef2ff;
+        background: var(--accent);
         border: none;
-        border-radius: 24px;
-        padding: 8px 16px;
-        font-size: 14px;
-        color: #667eea;
-        transition: background 0.2s;
+        border-radius: 10px;
+        padding: 9px 16px;
+        color: white;
+        transition: all 0.2s;
+        box-shadow: 0 2px 10px rgba(94, 106, 210, 0.35);
     }
     .input-mock button:hover {
-        background: #e2e8f0;
+        background: var(--accent-bright);
     }
-    @media (max-width: 768px) {
-        .hero-section .display-4 {
-            font-size: 2.2rem;
-        }
-        .section-title {
-            font-size: 24px;
-        }
+
+    /* ── Bento Grid Cards ── */
+    .bento-card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border: 1px solid var(--border-default);
+        border-radius: var(--radius-xl);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+    }
+    .bento-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(94, 106, 210, 0.4);
+        box-shadow: 0 0 0 1px rgba(94, 106, 210, 0.2), 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 40px rgba(94, 106, 210, 0.12);
+    }
+    .feature-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        background: rgba(94, 106, 210, 0.12);
+        border: 1px solid rgba(94, 106, 210, 0.3);
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 16px rgba(94, 106, 210, 0.15);
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .bento-card:hover .feature-icon {
+        transform: scale(1.05);
+        background: rgba(94, 106, 210, 0.2);
+        color: #A5B4FC;
+    }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border: 1px solid rgba(94, 106, 210, 0.25);
+        border-radius: var(--radius-xl);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 50px rgba(94, 106, 210, 0.1);
+        position: relative;
+        overflow: hidden;
     }
 </style>
 {% endblock content %}
